@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { explainTopic } from '../api'
 import { useAsync } from '../hooks/useAsync'
 import { ErrorBlock } from './ErrorBlock'
+import { MarkdownView } from './MarkdownView'
 import { Spinner } from './Spinner'
 
 const BUTTON =
@@ -65,7 +66,9 @@ export function ExplainTab() {
           Объяснить
         </button>
 
-        {loading && <Spinner text="Объясняем..." />}
+        {loading && (
+          <Spinner text="Готовим объяснение... (обычно 10–15 секунд)" />
+        )}
         {error && <ErrorBlock message={error} />}
       </div>
 
@@ -74,9 +77,7 @@ export function ExplainTab() {
           <h3 className="text-sm font-semibold text-gray-700 mb-2">
             Объяснение ({level})
           </h3>
-          <pre className="whitespace-pre-wrap text-sm text-gray-700">
-            {data.result}
-          </pre>
+          <MarkdownView content={data.result} />
         </div>
       )}
     </div>

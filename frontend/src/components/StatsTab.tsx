@@ -100,6 +100,14 @@ export function StatsTab() {
         </div>
       )}
 
+      {data && Object.keys(data.avg_duration_ms_by_module).length > 0 && (
+        <p className="text-xs text-gray-400">
+          Среднее время: ЭКГ {data.avg_duration_ms_by_module['ecg'] ?? '—'} мс,
+          Задачи {data.avg_duration_ms_by_module['solver'] ?? '—'} мс,
+          Объяснения {data.avg_duration_ms_by_module['explain'] ?? '—'} мс
+        </p>
+      )}
+
       <button type="button" className={BUTTON} disabled={loading} onClick={run}>
         Обновить
       </button>

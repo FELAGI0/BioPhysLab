@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { solveTask } from '../api'
 import { useAsync } from '../hooks/useAsync'
 import { ErrorBlock } from './ErrorBlock'
+import { MarkdownView } from './MarkdownView'
 import { Spinner } from './Spinner'
 
 const BUTTON =
@@ -50,7 +51,7 @@ export function SolverTab() {
           Решить
         </button>
 
-        {loading && <Spinner text="Решаем задачу..." />}
+        {loading && <Spinner text="Решаем задачу... (обычно 5–10 секунд)" />}
         {error && <ErrorBlock message={error} />}
       </div>
 
@@ -59,9 +60,7 @@ export function SolverTab() {
           <h3 className="text-sm font-semibold text-gray-700 mb-2">
             Пошаговое решение
           </h3>
-          <pre className="whitespace-pre-wrap text-sm text-gray-700">
-            {data.result}
-          </pre>
+          <MarkdownView content={data.result} />
         </div>
       )}
     </div>

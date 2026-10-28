@@ -16,18 +16,23 @@ export interface StatsResponse {
   avg_duration_ms_by_module: Record<string, number>
 }
 
-/** Читает detail из JSON-ошибки FastAPI и превращает её в Error. */
-async function throwApiError(response: Response): Promise<never> {
-  let detail = `HTTP ${response.status}`
+/**
+ * Превращает HTTP-ответ с ошибкой в Error с человекочитаемым текстом.
+ * Пытается достать detail из JSON-тела FastAPI; если JSON невалидный
+ * (например, HTML от Vite-прокси) — текст по коду статуса.
+ * response.text() целиком НЕ логируем: там может быть HTML.
+ */
+async function handleError(response: Response): Promise<never> {
+  let message: string | null = null
   try {
     const body = await response.json()
     if (typeof body?.detail === 'string') {
-      detail = body.detail
+      message = body.detail
     }
   } catch {
-    // тело не JSON — оставляем HTTP-код как текст ошибки
+    // тело не JSON — остаёмся на сообщении по коду статуса
   }
-  throw new Error(detail)
+  throw new Error(message ?? `Ошибка сервера: ${response.status}`)
 }
 
 /** POST /api/solver — пошаговое решение задачи по биофизике. */
@@ -38,7 +43,7 @@ export async function solveTask(task: string): Promise<AiResult> {
     body: JSON.stringify({ task }),
   })
   if (!response.ok) {
-    await throwApiError(response)
+    await handleError(response)
   }
   return response.json()
 }
@@ -51,7 +56,7 @@ export async function explainTopic(topic: string, level: string): Promise<AiResu
     body: JSON.stringify({ topic, level }),
   })
   if (!response.ok) {
-    await throwApiError(response)
+    await handleError(response)
   }
   return response.json()
 }
@@ -65,7 +70,7 @@ export async function analyzeEcg(file: File): Promise<AiResult> {
     body: formData,
   })
   if (!response.ok) {
-    await throwApiError(response)
+    await handleError(response)
   }
   return response.json()
 }
@@ -74,7 +79,7 @@ export async function analyzeEcg(file: File): Promise<AiResult> {
 export async function getStats(): Promise<StatsResponse> {
   const response = await fetch('/api/stats')
   if (!response.ok) {
-    await throwApiError(response)
+    await handleError(response)
   }
   return response.json()
 }

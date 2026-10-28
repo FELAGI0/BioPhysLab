@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { analyzeEcg } from '../api'
 import { useAsync } from '../hooks/useAsync'
 import { ErrorBlock } from './ErrorBlock'
+import { MarkdownView } from './MarkdownView'
 import { Spinner } from './Spinner'
 
 const BUTTON =
@@ -66,7 +67,9 @@ export function EcgTab() {
           Разобрать ЭКГ
         </button>
 
-        {loading && <Spinner text="Анализируем..." />}
+        {loading && (
+          <Spinner text="Анализируем ЭКГ... (обычно 10–15 секунд)" />
+        )}
         {error && <ErrorBlock message={error} />}
       </div>
 
@@ -75,9 +78,7 @@ export function EcgTab() {
           <h3 className="text-sm font-semibold text-gray-700 mb-2">
             Результат разбора
           </h3>
-          <pre className="whitespace-pre-wrap text-sm text-gray-700">
-            {data.result}
-          </pre>
+          <MarkdownView content={data.result} />
         </div>
       )}
     </div>
