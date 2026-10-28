@@ -48,14 +48,23 @@ async def ask_ai(prompt: str, image_b64: str | None = None, module: str = "unkno
         raise HTTPException(status_code=502, detail="AI сервис недоступен")
     finally:
         latency_ms = round((time.monotonic() - started) * 1000)
+        # Логируем только безопасную диагностику: base_url, model, trust_env,
+        # status, latency_ms. Ключ, тело запроса и Authorization НЕ логируем.
+        base_url = (
+            settings.AI_BASE_URL if settings.AI_PROVIDER == "openai" else _GEMINI_URL.format(
+                model="…"
+            ).rsplit("/", 1)[0]
+        )
         logger.info(
-            "ai_call module=%s status=%s latency_ms=%s provider=%s model=%s",
-            module, status, latency_ms, settings.AI_PROVIDER, settings.AI_MODEL,
+            "ai_call module=%s status=%s latency_ms=%s provider=%s "
+            "base_url=%s model=%s trust_env=False",
+            module, status, latency_ms, settings.AI_PROVIDER, base_url, settings.AI_MODEL,
         )
         # Дублируем в stdout, чтобы лог был виден без настройки logging.
         print(
             f"[ai_call] module={module} status={status} latency_ms={latency_ms} "
-            f"provider={settings.AI_PROVIDER} model={settings.AI_MODEL}",
+            f"provider={settings.AI_PROVIDER} base_url={base_url} "
+            f"model={settings.AI_MODEL} trust_env=False",
             flush=True,
         )
 
@@ -74,7 +83,11 @@ async def _ask_gemini(prompt: str, image_b64: str | None) -> str | None:
         )
 
     url = _GEMINI_URL.format(model=settings.AI_MODEL)
-    async with httpx.AsyncClient(timeout=settings.AI_TIMEOUT_SECONDS) as client:
+    # trust_env=False: игнорировать системные HTTP_PROXY/HTTPS_PROXY,
+    # иначе запросы к AI-прокси могут уходить через сторонний прокси и падать.
+    async with httpx.AsyncClient(
+        timeout=settings.AI_TIMEOUT_SECONDS, trust_env=False
+    ) as client:
         response = await client.post(
             url,
             params={"key": settings.AI_API_KEY},
@@ -114,7 +127,11 @@ async def _ask_openai(prompt: str, image_b64: str | None) -> str | None:
     else:
         content = [{"type": "text", "text": prompt}]
 
-    async with httpx.AsyncClient(timeout=settings.AI_TIMEOUT_SECONDS) as client:
+    # trust_env=False: игнорировать системные HTTP_PROXY/HTTPS_PROXY,
+    # иначе запросы к AI-прокси могут уходить через сторонний прокси и падать.
+    async with httpx.AsyncClient(
+        timeout=settings.AI_TIMEOUT_SECONDS, trust_env=False
+    ) as client:
         response = await client.post(
             f"{settings.AI_BASE_URL.rstrip('/')}/chat/completions",
             headers={"Authorization": f"Bearer {settings.AI_API_KEY}"},

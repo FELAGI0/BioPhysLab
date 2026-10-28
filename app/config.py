@@ -26,7 +26,8 @@ class Settings(BaseSettings):
     SESSION_COOKIE_NAME: str = "biophyslab_sid"
 
     # --- AI-клиент ---
-    AI_TIMEOUT_SECONDS: int = 30
+    # 90 c: reasoning-модели отвечают дольше обычных чат-моделей.
+    AI_TIMEOUT_SECONDS: int = 90
 
     # --- Rate limit: запросов в час на одну cookie-сессию ---
     RATE_LIMIT_PER_HOUR: int = 30

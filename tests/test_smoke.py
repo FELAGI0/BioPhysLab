@@ -125,11 +125,13 @@ async def test_explain_mock(client):
 
 @pytest.mark.asyncio
 async def test_empty_ai_response(client):
-    """Провайдер вернул пустой текст → ask_ai даёт 502."""
+    """Провайдер вернул пустой текст → ask_ai даёт 502 (для любого провайдера)."""
     async def fake_provider(prompt: str, image_b64: str | None) -> str | None:
         return "   "  # пустой/whitespace ответ провайдера
 
-    with patch.object(ai_mod, "_ask_gemini", fake_provider):
+    # Мокаем оба провайдера: тест не должен зависеть от AI_PROVIDER в .env.
+    with patch.object(ai_mod, "_ask_gemini", fake_provider), \
+         patch.object(ai_mod, "_ask_openai", fake_provider):
         resp = await client.post("/api/solver", json={"task": "Задача про осмос"})
 
     assert resp.status_code == 502
