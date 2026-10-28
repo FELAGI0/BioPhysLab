@@ -1,6 +1,7 @@
 """Точка входа FastAPI-приложения BioPhysLab."""
 
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
@@ -8,6 +9,15 @@ from app.routers import ecg, explain, solver
 from app.services.stats import get_stats
 
 app = FastAPI(title="BioPhysLab", version="0.1.0")
+
+# Vite dev-сервер на 5173. В продакшене заменить на реальный домен.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(ecg.router, prefix="/api")
 app.include_router(solver.router, prefix="/api")
