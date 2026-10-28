@@ -7,11 +7,12 @@ import time
 from collections import defaultdict, deque
 from uuid import uuid4
 
-from fastapi import HTTPException, Request, Response
+from fastapi import Depends, HTTPException, Request, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.db import get_db
 from app.models import ModuleName, Session, UsageLog
 
 # In-memory хранилище rate limit: cookie_id -> очередь timestamp'ов запросов.
@@ -20,7 +21,7 @@ _RATE_LIMIT_STORE: dict[str, deque[float]] = defaultdict(deque)
 
 
 async def get_or_create_session(
-    request: Request, response: Response, db: AsyncSession
+    request: Request, response: Response, db: AsyncSession = Depends(get_db)
 ) -> Session:
     """Возвращает сессию из cookie, при отсутствии — создаёт новую и ставит cookie.
 
