@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { solveTask } from '../api'
 import { useAsync } from '../hooks/useAsync'
+import { CopyButton } from './CopyButton'
 import { ErrorBlock } from './ErrorBlock'
 import { MarkdownView } from './MarkdownView'
 import { Spinner } from './Spinner'
@@ -57,9 +58,12 @@ export function SolverTab() {
 
       {data?.result && (
         <div className="bg-white border rounded-xl p-4 shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-700 mb-2">
-            Пошаговое решение
-          </h3>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <h3 className="text-sm font-semibold text-gray-700">
+              Пошаговое решение
+            </h3>
+            <CopyButton content={data.result} />
+          </div>
           <MarkdownView content={data.result} />
         </div>
       )}

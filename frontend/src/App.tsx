@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { EcgTab } from './components/EcgTab'
 import { ExplainTab } from './components/ExplainTab'
+import { FaqModal } from './components/FaqModal'
+import { LicenseModal } from './components/LicenseModal'
 import { SolverTab } from './components/SolverTab'
 import { StatsTab } from './components/StatsTab'
 import { Tabs } from './components/Tabs'
@@ -12,6 +14,7 @@ type Tab = (typeof TABS)[number]
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('ЭКГ')
+  const [modal, setModal] = useState<'faq' | 'license' | null>(null)
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -45,10 +48,29 @@ function App() {
       </div>
 
       <footer className="border-t border-gray-200 bg-white py-4">
-        <p className="max-w-4xl mx-auto px-6 text-xs text-gray-400">
-          Учебный проект. Не заменяет консультацию врача.
-        </p>
+        <div className="max-w-4xl mx-auto px-6 text-xs text-gray-400 flex flex-wrap items-center gap-x-4 gap-y-1 justify-between">
+          <p>Проект не заменяет консультацию врача. © 2026 BioPhysLab.</p>
+          <nav className="flex gap-4" aria-label="Информация о проекте">
+            <button
+              type="button"
+              onClick={() => setModal('faq')}
+              className="text-blue-600 hover:text-blue-700 hover:underline"
+            >
+              О проекте (FAQ)
+            </button>
+            <button
+              type="button"
+              onClick={() => setModal('license')}
+              className="text-blue-600 hover:text-blue-700 hover:underline"
+            >
+              Лицензия
+            </button>
+          </nav>
+        </div>
       </footer>
+
+      {modal === 'faq' && <FaqModal onClose={() => setModal(null)} />}
+      {modal === 'license' && <LicenseModal onClose={() => setModal(null)} />}
     </div>
   )
 }
