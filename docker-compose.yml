@@ -7,7 +7,9 @@ services:
       POSTGRES_PASSWORD: biophyslab
       POSTGRES_DB: biophyslab
     ports:
-      - "5432:5432"
+      # На хосте порт 5432 уже занят локальным PostgreSQL-сервисом,
+      # поэтому контейнер публикуется на порту 5434.
+      - "5434:5432"
     volumes:
       - biophyslab_pgdata:/var/lib/postgresql/data
     healthcheck:

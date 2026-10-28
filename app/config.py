@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     """Конфигурация приложения. Загружается из файла .env и переменных окружения."""
 
     # --- База данных ---
-    DATABASE_URL: str = "postgresql+asyncpg://biophyslab:biophyslab@localhost:5432/biophyslab"
+    # Порт 5434: контейнер публикуется на нём, т.к. 5432 на хосте занят локальным PostgreSQL.
+    DATABASE_URL: str = "postgresql+asyncpg://biophyslab:biophyslab@localhost:5434/biophyslab"
 
     # --- AI-провайдер (ключ хранится только на сервере) ---
     AI_API_KEY: str = ""

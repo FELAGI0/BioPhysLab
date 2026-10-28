@@ -29,6 +29,11 @@ uvicorn app.main:app --reload
 Проверка: открыть http://127.0.0.1:8000/health — должно вернуть
 `{"status": "ok", "service": "BioPhysLab"}`.
 
+Примечание: PostgreSQL из docker-compose публикуется на порту **5434** хоста
+(порт 5432 уже занят локальным PostgreSQL-сервисом). Если на вашей машине 5432
+свободен — можно вернуть `"5432:5432"` в docker-compose.yml и поправить
+`DATABASE_URL` в `.env`.
+
 ## Как получить ключ AI
 
 **Gemini (бесплатно):**
