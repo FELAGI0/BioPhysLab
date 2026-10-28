@@ -37,7 +37,8 @@ class FakeDB:
     async def refresh(self, obj) -> None:  # noqa: ANN001
         pass
 
-    async def add(self, obj) -> None:  # noqa: ANN001
+    def add(self, obj) -> None:  # noqa: ANN001
+        # sync-метод, как у настоящего AsyncSession.add
         pass
 
 
