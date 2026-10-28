@@ -66,6 +66,10 @@ uvicorn app.main:app --reload
 2. Нажать «Create new secret key» и скопировать ключ
 3. Вставить в `.env`: `AI_API_KEY=...`, `AI_PROVIDER=openai`, `AI_MODEL=gpt-4o-mini`
 
+Если используете OpenAI-совместимый прокси, задайте `AI_BASE_URL` в `.env`
+(по умолчанию `https://api.openai.com/v1`) — тогда запросы пойдут в
+`{AI_BASE_URL}/chat/completions` с вашей моделью `AI_MODEL`.
+
 ## Ограничения
 
 - Проект учебный: **не заменяет консультацию врача**. Разбор ЭКГ —

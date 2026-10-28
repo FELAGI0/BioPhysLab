@@ -17,7 +17,6 @@ logger = logging.getLogger("biophyslab.ai_client")
 
 # Эндпоинты провайдеров (генерация контента).
 _GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-_OPENAI_URL = "https://api.openai.com/v1/chat/completions"
 
 
 async def ask_ai(prompt: str, image_b64: str | None = None, module: str = "unknown") -> str:
@@ -117,7 +116,7 @@ async def _ask_openai(prompt: str, image_b64: str | None) -> str | None:
 
     async with httpx.AsyncClient(timeout=settings.AI_TIMEOUT_SECONDS) as client:
         response = await client.post(
-            _OPENAI_URL,
+            f"{settings.AI_BASE_URL.rstrip('/')}/chat/completions",
             headers={"Authorization": f"Bearer {settings.AI_API_KEY}"},
             json={
                 "model": settings.AI_MODEL,

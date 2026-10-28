@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     AI_API_KEY: str = ""
     AI_PROVIDER: Literal["gemini", "openai"] = "gemini"
     AI_MODEL: str = "gemini-1.5-flash"
+    # Base URL для OpenAI-совместимых запросов (можно указать свой прокси).
+    AI_BASE_URL: str = "https://api.openai.com/v1"
 
     # --- Секрет для подписи cookie-сессий ---
     SECRET_KEY: str = "change-me"
