@@ -1,121 +1,50 @@
+/** BioPhysLab — UI с четырьмя вкладками: ЭКГ, Задачи, Объяснения, Статистика. */
+
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { EcgTab } from './components/EcgTab'
+import { ExplainTab } from './components/ExplainTab'
+import { SolverTab } from './components/SolverTab'
+import { StatsTab } from './components/StatsTab'
+import { Tabs } from './components/Tabs'
+
+const TABS = ['ЭКГ', 'Задачи', 'Объяснения', 'Статистика'] as const
+type Tab = (typeof TABS)[number]
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activeTab, setActiveTab] = useState<Tab>('ЭКГ')
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="max-w-4xl mx-auto p-6 w-full flex-1">
+        <header className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">BioPhysLab</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            ИИ-помощник по биофизике
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        </header>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="mb-6">
+          <Tabs
+            tabs={[...TABS]}
+            active={activeTab}
+            onChange={(t) => setActiveTab(t as Tab)}
+          />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <main>
+          {activeTab === 'ЭКГ' && <EcgTab />}
+          {activeTab === 'Задачи' && <SolverTab />}
+          {activeTab === 'Объяснения' && <ExplainTab />}
+          {activeTab === 'Статистика' && <StatsTab />}
+        </main>
+      </div>
+
+      <footer className="border-t border-gray-200 bg-white py-4">
+        <p className="max-w-4xl mx-auto px-6 text-xs text-gray-400">
+          Учебный проект. Не заменяет консультацию врача.
+        </p>
+      </footer>
+    </div>
   )
 }
 
