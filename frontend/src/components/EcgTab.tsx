@@ -221,8 +221,7 @@ export function EcgTab() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4">
           <div
             className="bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all duration-300 animate-fadeIn"
-            style={{ animationDelay: '100ms' }}
+                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-in-out"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
               <IconEcg size={24} className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
@@ -233,8 +232,7 @@ export function EcgTab() {
           </div>
           <div
             className="bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all duration-300 animate-fadeIn"
-            style={{ animationDelay: '200ms' }}
+                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-in-out"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
               <IconExplain size={24} className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
@@ -245,8 +243,7 @@ export function EcgTab() {
           </div>
           <div
             className="bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all duration-300 animate-fadeIn"
-            style={{ animationDelay: '300ms' }}
+                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-in-out"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
               <IconHistory size={24} className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
@@ -263,11 +260,9 @@ export function EcgTab() {
           className={
             'bg-gradient-to-r from-emerald-500 to-teal-500 font-semibold text-white rounded-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] ' +
             'px-8 py-4 text-lg inline-flex items-center justify-center gap-2 mx-auto mt-4 w-full md:w-auto ' +
-            'hover:bg-emerald-700 dark:hover:bg-emerald-400 ' +
-            'hover:scale-105 ' +
-            'transition-all duration-300 active:scale-95 animate-fadeIn'
+            'hover:-translate-y-1 hover:shadow-lg ' +
+            'transition-all duration-300 ease-in-out active:scale-95'
           }
-          style={{ animationDelay: '400ms' }}
         >
           <IconUpload size={22} />
           Загрузить ЭКГ
