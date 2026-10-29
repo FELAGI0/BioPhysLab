@@ -116,7 +116,7 @@ function AppInner() {
         </div>
 
         {/* key={activeTab}: контент вкладки плавно появляется при смене. */}
-        <main key={activeTab} className="animate-fadeIn">
+        <main key={activeTab} className="min-h-[400px] animate-fadeIn transition-all duration-300 ease-out">
           {activeTab === 'ЭКГ' && <EcgTab />}
           {activeTab === 'Задачи' && <SolverTab />}
           {activeTab === 'Объяснения' && <ExplainTab />}
