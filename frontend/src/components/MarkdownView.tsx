@@ -14,7 +14,7 @@ export function MarkdownView({ content }: MarkdownViewProps) {
     .replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$')
 
   return (
-    <div className="prose prose-sm max-w-none">
+    <div className="prose prose-sm max-w-none dark:prose-invert text-slate-800 dark:text-slate-100">
       <ReactMarkdown
         remarkPlugins={[remarkMath]}
         rehypePlugins={[rehypeKatex]}

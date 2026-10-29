@@ -6,6 +6,7 @@
 
 import base64
 import logging
+import re
 import time
 
 import httpx
@@ -17,6 +18,12 @@ logger = logging.getLogger("biophyslab.ai_client")
 
 # Эндпоинты провайдеров (генерация контента).
 _GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+_UI_TAG_RE = re.compile(r"</?(?:box|row|divider|AsyncImage|text)\b[^>]*>", re.IGNORECASE)
+
+
+def _strip_ui_tags(text: str) -> str:
+    """Удаляет служебную UI-разметку, которую иногда возвращает модель."""
+    return _UI_TAG_RE.sub("", text)
 
 
 async def ask_ai(prompt: str, image_b64: str | None = None, module: str = "unknown") -> str:
@@ -38,7 +45,7 @@ async def ask_ai(prompt: str, image_b64: str | None = None, module: str = "unkno
             status = "empty_response"
             raise HTTPException(status_code=502, detail="AI вернул пустой ответ")
 
-        return text
+        return _strip_ui_tags(text)
 
     except HTTPException:
         raise

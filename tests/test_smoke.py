@@ -126,6 +126,13 @@ async def test_explain_mock(client):
     assert "перемещение" in resp.json()["result"]
 
 
+def test_strip_ui_tags():
+    """Служебные UI-теги удаляются, а обычный Markdown сохраняется."""
+    source = "# Заголовок <box tone='info'>текст</box> <AsyncImage src='x' /> <text>ок</text>"
+
+    assert ai_mod._strip_ui_tags(source) == "# Заголовок текст  ок"
+
+
 @pytest.mark.asyncio
 async def test_empty_ai_response(client):
     """Провайдер вернул пустой текст → ask_ai даёт 502 (для любого провайдера)."""
