@@ -9,13 +9,17 @@ interface MarkdownViewProps {
 }
 
 export function MarkdownView({ content }: MarkdownViewProps) {
+  const normalizedContent = content
+    .replace(/\\\[([\s\S]*?)\\\]/g, '$$$1$$')
+    .replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$')
+
   return (
     <div className="prose prose-sm max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkMath]}
         rehypePlugins={[rehypeKatex]}
       >
-        {content}
+        {normalizedContent}
       </ReactMarkdown>
     </div>
   )
