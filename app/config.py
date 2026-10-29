@@ -14,10 +14,10 @@ class Settings(BaseSettings):
 
     # --- AI-провайдер (ключ хранится только на сервере) ---
     AI_API_KEY: str = ""
-    AI_PROVIDER: Literal["gemini", "openai"] = "gemini"
-    AI_MODEL: str = "gemini-1.5-flash"
+    AI_PROVIDER: Literal["openai", "gemini"] = "openai"
+    AI_MODEL: str = "claude-opus-5-5"
     # Base URL для OpenAI-совместимых запросов (можно указать свой прокси).
-    AI_BASE_URL: str = "https://api.openai.com/v1"
+    AI_BASE_URL: str = "https://neural-api.ru/v1"
 
     # --- Секрет для подписи cookie-сессий ---
     SECRET_KEY: str = "change-me"

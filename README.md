@@ -79,10 +79,12 @@ npm run build
 
 Ключ и адрес прокси задаются только в серверном `.env`:
 
+Используется OpenAI-совместимый прокси `https://neural-api.ru/v1` с моделью `claude-opus-5-5`:
+
 ```dotenv
 AI_PROVIDER=openai
-AI_MODEL=claude-opus-5
-AI_BASE_URL=https://moduleapi.pro/v1
+AI_MODEL=claude-opus-5-5
+AI_BASE_URL=https://neural-api.ru/v1
 AI_API_KEY=...
 ```
 
