@@ -60,11 +60,9 @@ export function ExplainTab() {
                        bg-white dark:bg-[#121A15] text-slate-900 dark:text-emerald-50
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-colors duration-200"
           >
-            {LEVELS.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
+            <option value="школьник">Школьник</option>
+            <option value="студент">Студент</option>
+            <option value="врач">Врач</option>
           </select>
         </label>
 
