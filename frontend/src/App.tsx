@@ -16,6 +16,7 @@ import { StatsTab } from './components/StatsTab'
 import { Tabs } from './components/Tabs'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { useTheme } from './hooks/useTheme'
+import { PresentationPage } from './components/PresentationPage'
 
 const TABS = ['ЭКГ', 'Задачи', 'Объяснения', 'Калькулятор', 'Статистика', 'История'] as const
 type Tab = (typeof TABS)[number]
@@ -81,6 +82,10 @@ function HeaderControls() {
 function AppInner() {
   const [activeTab, setActiveTab] = useState<Tab>('ЭКГ')
   const [modal, setModal] = useState<'faq' | 'license' | null>(null)
+
+  if (window.location.pathname === '/presentation') {
+    return <PresentationPage />
+  }
 
   // Простой роутинг без react-router: /shared/{token} — публичная страница.
   if (window.location.pathname.startsWith('/shared/')) {

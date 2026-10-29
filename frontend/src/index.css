@@ -5,8 +5,52 @@
 /* Tailwind v4: тёмная тема по классу на <html>. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
+@theme inline {
   --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+  /* Семантические токены лендинга /presentation.
+     Примитивы живут в :root/.dark ниже — так лендинг следует за темой приложения. */
+  --color-pl-ground: var(--pl-ground);
+  --color-pl-surface: var(--pl-surface);
+  --color-pl-surface-2: var(--pl-surface-2);
+  --color-pl-ink: var(--pl-ink);
+  --color-pl-ink-soft: var(--pl-ink-soft);
+  --color-pl-line: var(--pl-line);
+  --color-pl-accent: var(--pl-accent);
+  --color-pl-accent-2: var(--pl-accent-2);
+  --color-pl-deep: var(--pl-deep);
+  --color-pl-deep-ink: var(--pl-deep-ink);
+  --color-pl-deep-soft: var(--pl-deep-soft);
+}
+
+/* Светлая тема лендинга: холодный зелёно-серый. */
+:root {
+  --pl-ground: #f2f6f4;
+  --pl-surface: #ffffff;
+  --pl-surface-2: #e6edea;
+  --pl-ink: #0b1512;
+  --pl-ink-soft: #4c5f57;
+  --pl-line: rgba(11, 21, 18, 0.12);
+  --pl-accent: #047857;
+  --pl-accent-2: #0d9488;
+  --pl-deep: #0a1512;
+  --pl-deep-ink: #e9f2ef;
+  --pl-deep-soft: #9cb4aa;
+}
+
+/* Тёмная тема лендинга: графит с зелёным подтоном. */
+.dark {
+  --pl-ground: #0a1210;
+  --pl-surface: #121c18;
+  --pl-surface-2: #1a2622;
+  --pl-ink: #e9f2ef;
+  --pl-ink-soft: #9fb4ac;
+  --pl-line: rgba(146, 177, 164, 0.18);
+  --pl-accent: #34d399;
+  --pl-accent-2: #2dd4bf;
+  --pl-deep: #060d0b;
+  --pl-deep-ink: #e9f2ef;
+  --pl-deep-soft: #8ea79d;
 }
 
 @layer base {
@@ -97,4 +141,109 @@
    так что быстрые переключения просто перезапускают анимацию, не блокируя её. */
 .animate-fadeIn {
   animation: fadeIn 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ===== Лендинг /presentation ===== */
+
+/* Появление снизу вверх: контент уже виден по умолчанию,
+   анимация только добавляет движение. */
+@keyframes pl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Медленное «дыхание» светового пятна в hero. */
+@keyframes pl-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) scale(1.06);
+  }
+}
+
+/* Бегущая линия ЭКГ в hero. */
+@keyframes pl-ecg {
+  0% {
+    stroke-dashoffset: 620;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pl-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.pl-rise {
+  animation: pl-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.pl-drift {
+  animation: pl-drift 14s ease-in-out infinite;
+}
+
+.pl-ecg path {
+  stroke-dasharray: 620;
+  animation: pl-ecg 3.4s linear infinite;
+}
+
+/* Живая линия: бегущий блик по акцентной полосе. */
+.pl-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  animation: pl-sweep 3.6s ease-in-out infinite;
+}
+
+/* Браузерная поверхность: выделение и полосы прокрутки — из палитры. */
+::selection {
+  background: var(--pl-accent);
+  color: #ffffff;
+}
+
+.pl-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--pl-line) transparent;
+}
+
+.pl-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.pl-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pl-scroll::-webkit-scrollbar-thumb {
+  background: var(--pl-line);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-rise,
+  .pl-drift,
+  .pl-ecg path,
+  .pl-sweep::after {
+    animation: none;
+  }
 }
