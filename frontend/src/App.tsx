@@ -47,8 +47,8 @@ function HeaderControls() {
         onClick={toggle}
         aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
         title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
-        className="border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300
-                   rounded-lg p-1.5 hover:bg-gray-100 dark:hover:bg-slate-700
+        className="border border-slate-300 dark:border-emerald-900/50 text-slate-600 dark:text-emerald-200/70
+                   rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-emerald-900/40
                    transition-all duration-200 active:scale-95"
       >
         <ThemeToggleIcon dark={theme === 'dark'} />
@@ -57,7 +57,7 @@ function HeaderControls() {
       {user ? (
         <>
           <span
-            className="text-xs text-gray-500 dark:text-slate-400 truncate max-w-40 hidden sm:inline"
+            className="text-xs text-slate-500 dark:text-emerald-200/60 truncate max-w-40 hidden sm:inline"
             title={user}
           >
             {user}
@@ -65,8 +65,8 @@ function HeaderControls() {
           <button
             type="button"
             onClick={logout}
-            className="border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300
-                       rounded-lg px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-slate-700
+            className="border border-slate-300 dark:border-emerald-900/50 text-slate-600 dark:text-emerald-200/70
+                       rounded-lg px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-emerald-900/40
                        transition-all duration-200 active:scale-95"
           >
             Выйти
@@ -76,9 +76,9 @@ function HeaderControls() {
         <button
           type="button"
           onClick={() => setAuthOpen(true)}
-          className="border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300
-                     bg-blue-50 dark:bg-blue-900/40 rounded-lg px-3 py-1 text-xs
-                     hover:bg-blue-100 dark:hover:bg-blue-900/70
+          className="border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300
+                     bg-emerald-50 dark:bg-emerald-900/30 rounded-lg px-3 py-1 text-xs
+                     hover:bg-emerald-100 dark:hover:bg-emerald-900/50
                      transition-all duration-200 active:scale-95"
         >
           Войти
@@ -100,18 +100,18 @@ function AppInner() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0a0f0d] flex flex-col transition-colors duration-200">
       <div className="max-w-4xl mx-auto p-6 w-full flex-1">
         <header className="mb-6">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-emerald-50">
               BioPhysLab
             </h1>
             <div className="ml-auto">
               <HeaderControls />
             </div>
           </div>
-          <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-slate-500 dark:text-emerald-200/60">
             ИИ-помощник по биофизике
           </p>
         </header>
@@ -134,21 +134,21 @@ function AppInner() {
         </main>
       </div>
 
-      <footer className="border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 py-4 transition-colors duration-200">
-        <div className="max-w-4xl mx-auto px-6 text-xs text-gray-400 dark:text-slate-500 flex flex-wrap items-center gap-x-4 gap-y-1 justify-between">
+      <footer className="border-t border-slate-200 dark:border-emerald-900/50 bg-white dark:bg-[#121a17] py-4 transition-colors duration-200">
+        <div className="max-w-4xl mx-auto px-6 text-xs text-slate-400 dark:text-emerald-200/50 flex flex-wrap items-center gap-x-4 gap-y-1 justify-between">
           <p>Проект не заменяет консультацию врача. © 2026 BioPhysLab.</p>
           <nav className="flex gap-4" aria-label="Информация о проекте">
             <button
               type="button"
               onClick={() => setModal('faq')}
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-all duration-200"
+              className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline transition-all duration-200"
             >
               О проекте (FAQ)
             </button>
             <button
               type="button"
               onClick={() => setModal('license')}
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-all duration-200"
+              className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline transition-all duration-200"
             >
               Лицензия
             </button>

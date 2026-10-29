@@ -10,7 +10,7 @@ import { ShareButton } from './ShareButton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
-  'bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
+  'bg-emerald-600 text-white rounded-lg px-4 py-2 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 const LEVELS = ['школьник', 'студент', 'врач'] as const
 
@@ -31,9 +31,9 @@ export function ExplainTab() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
+      <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+          <span className="block text-sm font-medium text-slate-700 dark:text-emerald-200/70 mb-1">
             Явление или понятие
           </span>
           <input
@@ -41,14 +41,14 @@ export function ExplainTab() {
             value={topic}
             onChange={(e) => setTopic(e.target.value.slice(0, 200))}
             placeholder="Например: диффузия, потенциал покоя, ультразвук"
-            className="block w-full rounded-lg border border-gray-300 dark:border-slate-600 p-2 text-sm
-                       bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500
-                       focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
+            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 p-2 text-sm
+                       bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50 placeholder-slate-400 dark:placeholder-emerald-200/40
+                       focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-colors duration-200"
           />
         </label>
 
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+          <span className="block text-sm font-medium text-slate-700 dark:text-emerald-200/70 mb-1">
             Уровень слушателя
           </span>
           <select
@@ -56,9 +56,9 @@ export function ExplainTab() {
             onChange={(e) =>
               setLevel(e.target.value as (typeof LEVELS)[number])
             }
-            className="block w-full rounded-lg border border-gray-300 dark:border-slate-600 p-2 text-sm
-                       bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
-                       focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
+            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 p-2 text-sm
+                       bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50
+                       focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-colors duration-200"
           >
             {LEVELS.map((l) => (
               <option key={l} value={l}>
@@ -75,8 +75,8 @@ export function ExplainTab() {
               key={example}
               type="button"
               onClick={() => setTopic(example)}
-              className="text-sm bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600
-                         text-gray-700 dark:text-slate-300 rounded-full px-3 py-1
+              className="text-sm bg-slate-100 hover:bg-slate-200 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50
+                         text-slate-700 dark:text-emerald-200/70 rounded-full px-3 py-1
                          transition-colors duration-200 active:scale-95"
             >
               {example}
@@ -100,9 +100,9 @@ export function ExplainTab() {
       </div>
 
       {data?.result && (
-        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 shadow-sm transition-colors duration-200">
+        <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-slate-300">
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
               Объяснение ({level})
             </h3>
             <div className="flex gap-2">

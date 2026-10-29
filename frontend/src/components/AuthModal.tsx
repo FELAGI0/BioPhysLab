@@ -49,8 +49,8 @@ export function AuthModal({ onClose }: AuthModalProps) {
             className={
               'px-3 py-1.5 text-sm rounded-lg transition-colors ' +
               (isLogin
-                ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600')
+                ? 'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium'
+                : 'bg-slate-100 dark:bg-emerald-900/30 text-slate-600 dark:text-emerald-200/70 hover:bg-slate-200 dark:hover:bg-emerald-900/40')
             }
           >
             Вход
@@ -61,8 +61,8 @@ export function AuthModal({ onClose }: AuthModalProps) {
             className={
               'px-3 py-1.5 text-sm rounded-lg transition-colors ' +
               (!isLogin
-                ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600')
+                ? 'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium'
+                : 'bg-slate-100 dark:bg-emerald-900/30 text-slate-600 dark:text-emerald-200/70 hover:bg-slate-200 dark:hover:bg-emerald-900/40')
             }
           >
             Регистрация
@@ -70,7 +70,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
         </div>
 
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+          <span className="block text-sm font-medium text-slate-700 dark:text-emerald-200/70 mb-1">
             Email
           </span>
           <input
@@ -79,13 +79,13 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="student@example.com"
-            className="block w-full rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2 text-sm
-                       focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50 p-2 text-sm
+                       focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
           />
         </label>
 
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+          <span className="block text-sm font-medium text-slate-700 dark:text-emerald-200/70 mb-1">
             Пароль
           </span>
           <input
@@ -95,8 +95,8 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Минимум 6 символов"
-            className="block w-full rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2 text-sm
-                       focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50 p-2 text-sm
+                       focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
           />
         </label>
 
@@ -112,7 +112,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
         <button
           type="submit"
           disabled={busy}
-          className="bg-blue-600 dark:bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-700 dark:hover:bg-blue-600
+          className="bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-600
                      disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95 w-full"
         >
           {busy ? 'Подождите...' : isLogin ? 'Войти' : 'Зарегистрироваться'}

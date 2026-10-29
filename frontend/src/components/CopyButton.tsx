@@ -26,8 +26,8 @@ export function CopyButton({ content }: { content: string }) {
       <button
         type="button"
         onClick={onCopy}
-        className="border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 rounded-lg px-2 py-1 text-xs
-                   hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-800 dark:hover:text-gray-100
+        className="border border-slate-300 dark:border-emerald-900/50 text-slate-600 dark:text-emerald-200/70 rounded-lg px-2 py-1 text-xs
+                   hover:bg-slate-50 dark:hover:bg-emerald-900/40 hover:text-slate-800 dark:hover:text-emerald-100
                    transition-all duration-200 active:scale-95"
       >
         Скопировать ответ
@@ -36,7 +36,7 @@ export function CopyButton({ content }: { content: string }) {
         <span
           role="status"
           className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap
-                     bg-gray-900 dark:bg-slate-700 text-white text-xs rounded px-2 py-1"
+                     bg-slate-900 dark:bg-emerald-900/60 text-white text-xs rounded px-2 py-1"
         >
           Скопировано!
         </span>

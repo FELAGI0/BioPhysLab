@@ -14,10 +14,10 @@ import { HistoryCardSkeleton } from './Skeleton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
-  'bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
+  'bg-emerald-600 text-white rounded-lg px-4 py-2 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 const SMALL_BUTTON =
-  'border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 rounded-lg px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-800 dark:hover:text-gray-100 transition-all duration-200 active:scale-95'
+  'border border-slate-300 dark:border-emerald-900/50 text-slate-600 dark:text-emerald-200/70 rounded-lg px-2 py-1 text-xs hover:bg-slate-50 dark:hover:bg-emerald-900/40 hover:text-slate-800 dark:hover:text-emerald-100 transition-all duration-200 active:scale-95'
 
 /** Обрезает длинный текст запроса для карточки истории. */
 function truncate(text: string | null, max = 120): string {
@@ -92,7 +92,7 @@ export function HistoryTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <p className="text-sm text-gray-500 dark:text-slate-400">
+        <p className="text-sm text-slate-500 dark:text-emerald-200/60">
           Последние 20 запросов этой сессии
         </p>
         <div className="flex gap-2">
@@ -122,7 +122,7 @@ export function HistoryTab() {
       {error && <ErrorBlock message={error} />}
 
       {items.length === 0 && !loading && !error && (
-        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 shadow-sm text-sm text-gray-500 dark:text-slate-400 text-center transition-colors duration-200">
+        <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm text-sm text-slate-500 dark:text-emerald-200/60 text-center transition-colors duration-200">
           История пуста — сделайте запрос во вкладках «ЭКГ», «Задачи»
           или «Объяснения».
         </div>
@@ -133,19 +133,19 @@ export function HistoryTab() {
           {items.map((item) => (
         <div
           key={item.id}
-          className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700
+          className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50
                      rounded-xl p-4 shadow-sm hover:shadow-md
                      transition-all duration-200"
         >
           <div className="flex items-start justify-between gap-2 flex-wrap">
             <div className="min-w-0">
-              <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded">
+              <span className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs px-2 py-0.5 rounded">
                 {item.module_title}
               </span>
-              <span className="ml-2 text-xs text-gray-400 dark:text-slate-500">
+              <span className="ml-2 text-xs text-slate-400 dark:text-emerald-200/50">
                 {formatDate(item.created_at)}
               </span>
-              <p className="mt-1 text-sm text-gray-700 dark:text-slate-300 break-words">
+              <p className="mt-1 text-sm text-slate-700 dark:text-emerald-200/70 break-words">
                 {truncate(item.request_text)}
               </p>
             </div>
@@ -178,7 +178,7 @@ export function HistoryTab() {
           </div>
 
           {expandedId === item.id && item.response_text && (
-            <div className="mt-3 border-t border-gray-100 dark:border-slate-700 pt-3">
+            <div className="mt-3 border-t border-slate-100 dark:border-emerald-900/40 pt-3">
               <MarkdownView content={item.response_text} />
             </div>
           )}

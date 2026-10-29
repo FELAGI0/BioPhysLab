@@ -9,7 +9,7 @@ interface TabsProps {
 export function Tabs({ tabs, active, onChange }: TabsProps) {
   return (
     <nav
-      className="flex gap-6 border-b border-gray-200 dark:border-slate-700"
+      className="flex gap-6 border-b border-slate-200 dark:border-emerald-900/50"
       aria-label="Вкладки"
     >
       {tabs.map((tab) => (
@@ -20,8 +20,8 @@ export function Tabs({ tabs, active, onChange }: TabsProps) {
           className={
             'pb-2 text-sm font-medium transition-all duration-200 active:scale-95 ' +
             (tab === active
-              ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400'
-              : 'border-b-2 border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-gray-200')
+              ? 'border-b-2 border-emerald-600 text-emerald-600 dark:text-emerald-400'
+              : 'border-b-2 border-transparent text-slate-500 dark:text-emerald-200/60 hover:text-slate-700 dark:hover:text-emerald-100')
           }
         >
           {tab}
