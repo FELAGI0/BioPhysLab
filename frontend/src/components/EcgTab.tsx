@@ -210,28 +210,30 @@ export function EcgTab() {
   return (
     <div className="space-y-12">
       <section className="text-center space-y-6 pt-8 max-w-6xl mx-auto animate-fadeIn">
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-emerald-50">
+        <h2 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-emerald-50">
           ИИ-анализ электрокардиограмм
         </h2>
-        <p className="text-lg md:text-xl text-slate-500 dark:text-emerald-100/70 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
           BioPhysLab разбирает снимки ЭКГ и объясняет каждый вывод —
           как врач-биофизик, только быстрее.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4">
           <div
-            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6
-                       hover:-translate-y-1 transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-md transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '100ms' }}
           >
-            <IconEcg size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
-            <p className="text-sm text-slate-700 dark:text-emerald-50">
+            <div className="mb-4 flex items-center justify-center">
+              <IconEcg size={32} className="h-8 w-8 text-slate-600 dark:text-emerald-400" />
+            </div>
+            <p className="mb-1 text-base font-medium text-slate-700 dark:text-emerald-50">
               Анализ за 5–10 секунд
             </p>
           </div>
           <div
-            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6
-                       hover:-translate-y-1 transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-md transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '200ms' }}
           >
             <IconExplain size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
@@ -240,8 +242,8 @@ export function EcgTab() {
             </p>
           </div>
           <div
-            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6
-                       hover:-translate-y-1 transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-md transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '300ms' }}
           >
             <IconHistory size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
@@ -277,7 +279,7 @@ export function EcgTab() {
       </section>
 
       {recent.length > 0 && (
-        <section className="space-y-3">
+        <section className="mx-auto max-w-4xl space-y-3">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
             Последние исследования
           </h3>
@@ -286,7 +288,7 @@ export function EcgTab() {
               <div
                 key={item.id}
                 className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24]
-                           rounded-xl p-3  flex items-center gap-3
+                           rounded-xl p-4 flex items-center gap-3 shadow-sm
                            hover:shadow-md transition-all duration-200"
               >
                 <span className="shrink-0 text-slate-500 dark:text-emerald-400">
@@ -296,7 +298,7 @@ export function EcgTab() {
                   <p className="text-sm text-slate-700 dark:text-emerald-50 truncate">
                     {item.request_text ?? 'Изображение ЭКГ'}
                   </p>
-                  <p className="text-xs text-slate-400 dark:text-emerald-200/50">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
                     {formatDate(item.created_at)}
                   </p>
                 </div>

@@ -5,6 +5,21 @@
 /* Tailwind v4: тёмная тема по классу на <html>. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  h1,
+  h2 {
+    font-weight: 700;
+  }
+}
+
 /* Премиальная графитовая палитра ночной темы. */
 .dark {
   color-scheme: dark;
