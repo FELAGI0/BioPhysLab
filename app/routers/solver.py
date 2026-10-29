@@ -23,7 +23,7 @@ router = APIRouter(tags=["solver"])
 class SolverRequest(BaseModel):
     """Тело запроса /api/solver: текст задачи по биофизике."""
 
-    task: str = Field(min_length=5, max_length=2000, description="Условие задачи")
+    task: str = Field(min_length=5, max_length=5000, description="Условие задачи")
 
 
 @router.post("/solver", response_model=None)

@@ -12,7 +12,7 @@ import { Spinner } from './Spinner'
 const BUTTON =
   'bg-gradient-to-r from-emerald-500 to-teal-500 font-semibold text-white rounded-lg px-6 py-3 text-base hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
-const MAX_TASK_LENGTH = 2000
+const MAX_TASK_LENGTH = 5000
 
 /** Быстрые примеры задач для новичка. */
 const QUICK_TASKS = [
