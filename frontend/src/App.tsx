@@ -9,6 +9,7 @@ import { FaqModal } from './components/FaqModal'
 import { HistoryTab } from './components/HistoryTab'
 import { IconEcg, IconMoon, IconSun } from './components/icons'
 import { LicenseModal } from './components/LicenseModal'
+import { NernstTab } from './components/NernstTab'
 import { SharedPage } from './components/SharedPage'
 import { SolverTab } from './components/SolverTab'
 import { StatsTab } from './components/StatsTab'
@@ -16,7 +17,7 @@ import { Tabs } from './components/Tabs'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { useTheme } from './hooks/useTheme'
 
-const TABS = ['ЭКГ', 'Задачи', 'Объяснения', 'Статистика', 'История'] as const
+const TABS = ['ЭКГ', 'Задачи', 'Объяснения', 'Калькулятор', 'Статистика', 'История'] as const
 type Tab = (typeof TABS)[number]
 
 /** Иконка солнца/луны для переключателя темы. */
@@ -121,6 +122,7 @@ function AppInner() {
           {activeTab === 'ЭКГ' && <EcgTab />}
           {activeTab === 'Задачи' && <SolverTab />}
           {activeTab === 'Объяснения' && <ExplainTab />}
+          {activeTab === 'Калькулятор' && <NernstTab />}
           {activeTab === 'Статистика' && <StatsTab />}
           {activeTab === 'История' && <HistoryTab />}
         </main>

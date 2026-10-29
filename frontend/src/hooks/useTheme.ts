@@ -1,20 +1,43 @@
-/** Хук тёмной темы: localStorage + prefers-color-scheme, класс dark на <html>. */
+/** Хук тёмной темы: localStorage + расписание день/ночь + prefers-color-scheme.
+ *
+ * ЭКСПЕРИМЕНТ: если пользователь НЕ выбирал тему вручную (нет записи в
+ * localStorage), тема выбирается по расписанию: 07:00–20:00 — светлая,
+ * остальное время — тёмная («ночная смена»). Ручной клик фиксирует выбор.
+ */
 
 import { useEffect, useState } from 'react'
 
 const THEME_KEY = 'biophyslab_theme'
 type Theme = 'dark' | 'light'
 
-/** Читает тему: localStorage, иначе системную. */
-function getInitialTheme(): Theme {
+/** Есть ли сохранённый ручной выбор темы. */
+function hasStoredTheme(): boolean {
   try {
     const stored = localStorage.getItem(THEME_KEY)
-    if (stored === 'dark' || stored === 'light') return stored
+    return stored === 'dark' || stored === 'light'
   } catch {
-    // localStorage недоступен — берём системную
+    return false
   }
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark'
+}
+
+/** Тема по расписанию: 07:00–20:00 — светлая, иначе тёмная. */
+function scheduledTheme(): Theme {
+  const hour = new Date().getHours()
+  return hour >= 7 && hour < 20 ? 'light' : 'dark'
+}
+
+/** Читает тему: ручной выбор -> расписание -> системную. */
+function getInitialTheme(): Theme {
+  if (hasStoredTheme()) {
+    try {
+      const stored = localStorage.getItem(THEME_KEY)
+      if (stored === 'dark' || stored === 'light') return stored
+    } catch {
+      // ignore
+    }
+  }
+  if (scheduledTheme() !== 'light' || !window.matchMedia('(prefers-color-scheme: light)').matches) {
+    return scheduledTheme()
   }
   return 'light'
 }

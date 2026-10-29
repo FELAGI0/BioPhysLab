@@ -99,7 +99,13 @@ export function ExplainTab() {
         {error && <ErrorBlock message={error} />}
       </div>
 
-      {data?.result && (
+      {data?.result && data.result.startsWith('[OFF_TOPIC]') && (
+        <div role="alert" className="bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-800 rounded-xl p-4 transition-colors duration-200">
+          <p className="text-sm text-amber-800 dark:text-amber-200">{data.result.replace('[OFF_TOPIC]', '').trim()}</p>
+        </div>
+      )}
+
+      {data?.result && !data.result.startsWith('[OFF_TOPIC]') && (
         <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  transition-colors duration-200">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
             <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">

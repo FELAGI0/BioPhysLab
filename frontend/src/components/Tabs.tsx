@@ -18,6 +18,7 @@ const TAB_DEFS: TabDef[] = [
   { label: 'ЭКГ', icon: IconEcg },
   { label: 'Задачи', icon: IconSolver },
   { label: 'Объяснения', icon: IconExplain },
+  { label: 'Калькулятор', icon: IconStats },
   { label: 'Статистика', icon: IconStats },
   { label: 'История', icon: IconHistory },
 ]
