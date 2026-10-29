@@ -1,6 +1,7 @@
-/** BioPhysLab — UI с четырьмя вкладками: ЭКГ, Задачи, Объяснения, Статистика. */
+/** BioPhysLab — UI с пятью вкладками, авторизацией и публичной страницей шаринга. */
 
 import { useState } from 'react'
+import { AuthModal } from './components/AuthModal'
 import { EcgTab } from './components/EcgTab'
 import { ExplainTab } from './components/ExplainTab'
 import { FaqModal } from './components/FaqModal'
@@ -10,11 +11,48 @@ import { SharedPage } from './components/SharedPage'
 import { SolverTab } from './components/SolverTab'
 import { StatsTab } from './components/StatsTab'
 import { Tabs } from './components/Tabs'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 
 const TABS = ['ЭКГ', 'Задачи', 'Объяснения', 'Статистика', 'История'] as const
 type Tab = (typeof TABS)[number]
 
-function App() {
+/** Блок авторизации в шапке: email + «Выйти» или кнопка «Войти». */
+function AuthHeader() {
+  const { user, logout } = useAuth()
+  const [authOpen, setAuthOpen] = useState(false)
+
+  return (
+    <>
+      {user ? (
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-500 truncate max-w-40" title={user}>
+            {user}
+          </span>
+          <button
+            type="button"
+            onClick={logout}
+            className="border border-gray-300 text-gray-600 rounded-lg px-2 py-1 text-xs
+                       hover:bg-gray-50 hover:text-gray-800 transition-colors"
+          >
+            Выйти
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setAuthOpen(true)}
+          className="border border-blue-300 text-blue-700 bg-blue-50 rounded-lg px-3 py-1 text-xs
+                     hover:bg-blue-100 transition-colors"
+        >
+          Войти
+        </button>
+      )}
+      {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
+    </>
+  )
+}
+
+function AppInner() {
   const [activeTab, setActiveTab] = useState<Tab>('ЭКГ')
   const [modal, setModal] = useState<'faq' | 'license' | null>(null)
 
@@ -33,6 +71,9 @@ function App() {
             <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
               MVP
             </span>
+            <div className="ml-auto">
+              <AuthHeader />
+            </div>
           </div>
           <p className="mt-1 text-sm text-gray-500">
             ИИ-помощник по биофизике
@@ -81,6 +122,14 @@ function App() {
       {modal === 'faq' && <FaqModal onClose={() => setModal(null)} />}
       {modal === 'license' && <LicenseModal onClose={() => setModal(null)} />}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppInner />
+    </AuthProvider>
   )
 }
 

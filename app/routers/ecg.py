@@ -7,8 +7,13 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response, Upload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
-from app.deps import get_or_create_session, log_usage, rate_limit
-from app.models import ModuleName, Session
+from app.deps import (
+    get_current_user_optional,
+    get_or_create_session,
+    log_usage,
+    rate_limit,
+)
+from app.models import ModuleName, Session, User
 from app.prompts import ECG_PROMPT
 from app.services.ai_client import ask_ai
 
@@ -25,6 +30,7 @@ async def analyze_ecg(
     response: Response,
     db: AsyncSession = Depends(get_db),
     session: Session = Depends(get_or_create_session),
+    user: User | None = Depends(get_current_user_optional),
 ) -> dict[str, str]:
     """Разбирает изображение ЭКГ (jpg/png, до 5 МБ) и возвращает анализ AI."""
     # Rate limit по id cookie-сессии.
@@ -60,5 +66,6 @@ async def analyze_ecg(
         duration_ms,
         request_text="Изображение ЭКГ (jpg/png)",
         response_text=result,
+        user_id=user.id if user else None,
     )
     return {"result": result, "id": entry.id}

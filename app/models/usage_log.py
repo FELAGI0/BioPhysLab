@@ -26,6 +26,10 @@ class UsageLog(Base):
     session_id: Mapped[str] = mapped_column(
         ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False
     )
+    # Привязка к пользователю (SET NULL: при удалении юзера история остаётся).
+    user_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
     module: Mapped[ModuleName] = mapped_column(
         Enum(ModuleName, name="modulename"), nullable=False
     )

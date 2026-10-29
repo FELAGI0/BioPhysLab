@@ -10,3 +10,7 @@ python-multipart
 pytest
 pytest-asyncio
 fpdf2
+passlib[bcrypt]
+bcrypt==3.2.2
+python-jose[cryptography]
+email-validator

@@ -11,8 +11,8 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
-from app.deps import get_or_create_session
-from app.models import ModuleName, Session, UsageLog
+from app.deps import get_current_user_optional, get_or_create_session
+from app.models import ModuleName, Session, UsageLog, User
 from app.models.usage_log import ModuleName as ModuleNameEnum
 
 router = APIRouter(tags=["history"])
@@ -36,14 +36,24 @@ async def get_history(
     response: Response,
     db: AsyncSession = Depends(get_db),
     session: Session = Depends(get_or_create_session),
+    user: User | None = Depends(get_current_user_optional),
 ) -> dict:
-    """Последние 20 записей текущей сессии, новые сверху."""
-    result = await db.execute(
-        select(UsageLog)
-        .where(UsageLog.session_id == session.id)
-        .order_by(UsageLog.created_at.desc())
-        .limit(20)
-    )
+    """Последние 20 записей: для юзера — его записи, иначе — текущей сессии."""
+    if user is not None:
+        # Залогиненный пользователь видит всё, что привязано к нему.
+        result = await db.execute(
+            select(UsageLog)
+            .where(UsageLog.user_id == user.id)
+            .order_by(UsageLog.created_at.desc())
+            .limit(20)
+        )
+    else:
+        result = await db.execute(
+            select(UsageLog)
+            .where(UsageLog.session_id == session.id)
+            .order_by(UsageLog.created_at.desc())
+            .limit(20)
+        )
     logs = result.scalars().all()
     return {
         "items": [
@@ -67,19 +77,30 @@ async def clear_history(
     response: Response,
     db: AsyncSession = Depends(get_db),
     session: Session = Depends(get_or_create_session),
+    user: User | None = Depends(get_current_user_optional),
 ) -> dict:
-    """Удаляет все записи текущей сессии."""
-    await db.execute(delete(UsageLog).where(UsageLog.session_id == session.id))
+    """Удаляет все записи: для юзера — его записи, иначе — текущей сессии."""
+    if user is not None:
+        await db.execute(delete(UsageLog).where(UsageLog.user_id == user.id))
+    else:
+        await db.execute(delete(UsageLog).where(UsageLog.session_id == session.id))
     await db.commit()
     return {"status": "cleared"}
 
 
 async def _get_own_log(
-    log_id: int, session: Session, db: AsyncSession
+    log_id: int,
+    session: Session,
+    db: AsyncSession,
+    user: User | None = None,
 ) -> UsageLog:
-    """Находит запись по id и проверяет, что она принадлежит текущей сессии."""
+    """Находит запись по id; своя — если совпадает сессия ИЛИ user_id."""
     log = await db.get(UsageLog, log_id)
-    if log is None or log.session_id != session.id:
+    if log is None:
+        raise HTTPException(status_code=404, detail="Запись не найдена")
+    own_by_session = log.session_id == session.id
+    own_by_user = user is not None and log.user_id == user.id
+    if not (own_by_session or own_by_user):
         raise HTTPException(status_code=404, detail="Запись не найдена")
     return log
 
@@ -91,9 +112,10 @@ async def share_result(
     response: Response,
     db: AsyncSession = Depends(get_db),
     session: Session = Depends(get_or_create_session),
+    user: User | None = Depends(get_current_user_optional),
 ) -> dict:
     """Генерирует токен шаринга для записи (если ещё нет) и возвращает относительный URL."""
-    log = await _get_own_log(log_id, session, db)
+    log = await _get_own_log(log_id, session, db, user)
 
     if not log.share_token:
         log.share_token = str(uuid4())
@@ -129,9 +151,10 @@ async def export_pdf(
     response: Response,
     db: AsyncSession = Depends(get_db),
     session: Session = Depends(get_or_create_session),
+    user: User | None = Depends(get_current_user_optional),
 ) -> StreamingResponse:
-    """Экспорт записи в PDF (владелец записи — текущая сессия)."""
-    log = await _get_own_log(log_id, session, db)
+    """Экспорт записи в PDF (владелец — текущая сессия или пользователь)."""
+    log = await _get_own_log(log_id, session, db, user)
 
     # fpdf2 со встроенным шрифтом не поддерживает кириллицу;
     # поэтому генерируем PDF через Unicode-шрифт Windows (Arial).
