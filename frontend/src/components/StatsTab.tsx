@@ -8,7 +8,7 @@ import { Spinner } from './Spinner'
 import { StatsSkeleton } from './Skeleton'
 
 const BUTTON =
-  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium text-white rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
+  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg px-6 py-3 text-base hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 const MODULE_LABELS: Record<string, string> = {
   ecg: 'ЭКГ',
@@ -44,20 +44,20 @@ export function StatsTab() {
       {data && (
         <div key={loading ? 'loading' : 'ready'} className="space-y-4 animate-fadeIn">
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
-          <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
+          <div className="text-3xl font-bold text-slate-500 dark:text-emerald-400">
             {data?.total_sessions ?? '—'}
           </div>
           <div className="mt-1 text-xs text-slate-500 dark:text-emerald-200/60">Всего сессий</div>
         </div>
-        <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
-          <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
+          <div className="text-3xl font-bold text-slate-500 dark:text-emerald-400">
             {data?.total_requests ?? '—'}
           </div>
           <div className="mt-1 text-xs text-slate-500 dark:text-emerald-200/60">Всего запросов</div>
         </div>
-        <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
-          <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
+          <div className="text-3xl font-bold text-slate-500 dark:text-emerald-400">
             {data ? Object.keys(data.by_module).length : '—'}
           </div>
           <div className="mt-1 text-xs text-slate-500 dark:text-emerald-200/60">Модулей</div>
@@ -66,14 +66,14 @@ export function StatsTab() {
 
       {data && (
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
+          <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
             <h3 className="mb-2 text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
               Запросы по модулям
             </h3>
             <table className="w-full text-sm">
               <tbody>
                 {Object.entries(data.by_module).map(([key, count]) => (
-                  <tr key={key} className="border-b border-slate-100 dark:border-emerald-900/40 last:border-0">
+                  <tr key={key} className="border-b border-slate-100 dark:border-[#1F2E24] last:border-0">
                     <td className="py-1.5 text-slate-600 dark:text-emerald-200/60">{moduleLabel(key)}</td>
                     <td className="py-1.5 text-right font-medium text-slate-800 dark:text-emerald-100">
                       {count}
@@ -84,7 +84,7 @@ export function StatsTab() {
             </table>
           </div>
 
-          <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
+          <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
             <h3 className="mb-2 text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
               Среднее время ответа
             </h3>
@@ -94,7 +94,7 @@ export function StatsTab() {
                   ([key, ms]) => (
                     <tr
                       key={key}
-                      className="border-b border-slate-100 dark:border-emerald-900/40 last:border-0"
+                      className="border-b border-slate-100 dark:border-[#1F2E24] last:border-0"
                     >
                       <td className="py-1.5 text-slate-600 dark:text-emerald-200/60">
                         {moduleLabel(key)}

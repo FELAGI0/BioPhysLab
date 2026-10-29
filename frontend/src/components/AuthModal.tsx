@@ -79,7 +79,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="student@example.com"
-            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50 p-2 text-sm
+            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50 p-2 text-sm
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
           />
         </label>
@@ -95,7 +95,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Минимум 6 символов"
-            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50 p-2 text-sm
+            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50 p-2 text-sm
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
           />
         </label>
@@ -112,7 +112,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
         <button
           type="submit"
           disabled={busy}
-          className="bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-400
+          className="bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold rounded-lg px-6 py-3 text-base hover:bg-emerald-700 dark:hover:bg-emerald-400
                      disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95 w-full"
         >
           {busy ? 'Подождите...' : isLogin ? 'Войти' : 'Зарегистрироваться'}

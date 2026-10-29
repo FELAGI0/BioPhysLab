@@ -10,7 +10,7 @@ import { ShareButton } from './ShareButton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
-  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium text-white rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
+  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg px-6 py-3 text-base hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 const LEVELS = ['школьник', 'студент', 'врач'] as const
 
@@ -31,7 +31,7 @@ export function ExplainTab() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
+      <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
         <label className="block">
           <span className="block text-sm font-medium text-slate-700 dark:text-emerald-200/70 mb-1">
             Явление или понятие
@@ -41,8 +41,8 @@ export function ExplainTab() {
             value={topic}
             onChange={(e) => setTopic(e.target.value.slice(0, 200))}
             placeholder="Например: диффузия, потенциал покоя, ультразвук"
-            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 p-2 text-sm
-                       bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50 placeholder-slate-400 dark:placeholder-emerald-200/40
+            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] p-2 text-sm
+                       bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50 placeholder-slate-400 dark:placeholder-emerald-200/40
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-colors duration-200"
           />
         </label>
@@ -56,8 +56,8 @@ export function ExplainTab() {
             onChange={(e) =>
               setLevel(e.target.value as (typeof LEVELS)[number])
             }
-            className="block w-full rounded-lg border border-slate-300 dark:border-emerald-900/50 p-2 text-sm
-                       bg-white dark:bg-[#0a0f0d] text-slate-900 dark:text-emerald-50
+            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] p-2 text-sm
+                       bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-colors duration-200"
           >
             {LEVELS.map((l) => (
@@ -100,7 +100,7 @@ export function ExplainTab() {
       </div>
 
       {data?.result && (
-        <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
+        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
             <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
               Объяснение ({level})

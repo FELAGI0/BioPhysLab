@@ -41,7 +41,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
     >
       <div
         className={
-          'bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-6 shadow-lg ' +
+          'bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-lg ' +
           'max-w-lg w-full max-h-[80vh] overflow-y-auto transition-transform duration-200 ' +
           (visible ? 'scale-100' : 'scale-95')
         }
@@ -64,7 +64,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium text-white rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-400
+            className="bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg px-6 py-3 text-base hover:bg-emerald-700 dark:hover:bg-emerald-400
                        transition-all duration-200 active:scale-95"
           >
             Закрыть

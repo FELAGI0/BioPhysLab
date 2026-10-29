@@ -39,7 +39,7 @@ export function FaqModal({ onClose }: { onClose: () => void }) {
       <ul className="space-y-3">
         {FAQ_ITEMS.map((item) => (
           <li key={item.title} className="flex gap-2">
-            <span className="text-emerald-600 dark:text-emerald-400 mt-0.5" aria-hidden="true">
+            <span className="text-slate-500 dark:text-emerald-400 mt-0.5" aria-hidden="true">
               •
             </span>
             <span>

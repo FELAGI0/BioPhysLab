@@ -17,10 +17,10 @@ import { ShareButton } from './ShareButton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
-  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium text-white rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
+  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg px-6 py-3 text-base hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
-const DRAG_OVER =
-  'border-emerald-400 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024 // 5 МБ
+const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
 
 function formatDate(iso: string | null): string {
   if (!iso) return '—'
@@ -35,8 +35,10 @@ export function EcgTab() {
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [dragActive, setDragActive] = useState(false)
+  const [fileError, setFileError] = useState<string | null>(null)
   const [recent, setRecent] = useState<HistoryItem[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const dragCounter = useRef(0)
 
   // Освобождаем URL превью при смене файла и при размонтировании.
   useEffect(() => {
@@ -58,34 +60,53 @@ export function EcgTab() {
     file ? analyzeEcg(file) : Promise.reject(new Error('Файл не выбран')),
   )
 
+  /** Проверяет тип (png/jpg) и размер (до 5 МБ); принимает или отклоняет файл. */
   const acceptFile = (selected: File | null) => {
-    if (
-      selected &&
-      !['image/png', 'image/jpeg', 'image/jpg'].includes(selected.type)
-    ) {
+    setFileError(null)
+    if (!selected) return
+    if (!ALLOWED_TYPES.includes(selected.type)) {
+      setFileError('Допустимы только изображения PNG или JPG')
+      return
+    }
+    if (selected.size > MAX_IMAGE_BYTES) {
+      setFileError('Файл слишком большой (максимум 5 МБ)')
       return
     }
     if (previewUrl) URL.revokeObjectURL(previewUrl)
     setFile(selected)
-    setPreviewUrl(selected ? URL.createObjectURL(selected) : null)
+    setPreviewUrl(URL.createObjectURL(selected))
   }
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     acceptFile(e.target.files?.[0] ?? null)
   }
 
+  // dragCounter: dragenter/dragleave на дочерних элементах не «мигают» —
+  //enter увеличивает счётчик, leave уменьшает; активность = счётчик > 0.
+  const onDragEnter = (e: React.DragEvent) => {
+    e.preventDefault()
+    dragCounter.current += 1
+    setDragActive(true)
+  }
+
   const onDragOver = (e: React.DragEvent) => {
+    // preventDefault обязателен: без него браузер открывает файл вместо drop.
     e.preventDefault()
     setDragActive(true)
   }
 
   const onDragLeave = (e: React.DragEvent) => {
     e.preventDefault()
-    setDragActive(false)
+    dragCounter.current -= 1
+    if (dragCounter.current <= 0) {
+      dragCounter.current = 0
+      setDragActive(false)
+    }
   }
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault()
+    dragCounter.current = 0
     setDragActive(false)
     acceptFile(e.dataTransfer.files?.[0] ?? null)
   }
@@ -94,25 +115,29 @@ export function EcgTab() {
   if (file || data?.result) {
     return (
       <div className="space-y-4">
-        <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
-          {/* Зона загрузки (drag & drop) */}
+        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
+          {/* Зона загрузки (drag & drop), крупная */}
           <div
             role="button"
             tabIndex={0}
             onClick={() => fileInputRef.current?.click()}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click()
+              if (e.key === 'Enter' || e.key === ' ')
+                fileInputRef.current?.click()
             }}
+            onDragEnter={onDragEnter}
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
             onDrop={onDrop}
             className={
-              'flex flex-col items-center justify-center gap-2 p-6 rounded-xl cursor-pointer ' +
-              'border-2 border-dashed border-slate-300 dark:border-emerald-900/50 transition-colors duration-200 ' +
-              (dragActive ? DRAG_OVER : 'hover:border-emerald-400 dark:hover:border-emerald-700')
+              'flex flex-col items-center justify-center gap-2 min-h-[200px] p-6 rounded-xl cursor-pointer ' +
+              'border-2 border-dashed border-slate-300 dark:border-[#1F2E24] transition-colors duration-200 ' +
+              (dragActive
+                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                : 'hover:border-emerald-400 dark:hover:border-emerald-700')
             }
           >
-            <IconUpload size={28} className="text-emerald-600 dark:text-emerald-400" />
+            <IconUpload size={36} className="text-slate-500 dark:text-emerald-400" />
             <p className="text-sm text-slate-700 dark:text-emerald-200/70">
               Загрузите изображение ЭКГ
             </p>
@@ -128,20 +153,22 @@ export function EcgTab() {
             />
           </div>
 
+          {fileError && <ErrorBlock message={fileError} />}
+
           {previewUrl && (
             <div className="space-y-3">
               <img
                 src={previewUrl}
                 alt="Предпросмотр ЭКГ"
-                className="max-h-64 rounded-lg border border-slate-200 dark:border-emerald-900/50"
+                className="max-h-64 rounded-lg border border-slate-200 dark:border-[#1F2E24]"
               />
               <button
                 type="button"
-                className={BUTTON + ' inline-flex items-center gap-2 px-6 py-2.5'}
+                className={BUTTON + ' inline-flex items-center gap-2'}
                 disabled={!file || loading}
                 onClick={run}
               >
-                <IconDoctor size={16} />
+                <IconDoctor size={18} />
                 {loading ? 'Анализируем...' : 'Проанализировать'}
               </button>
             </div>
@@ -154,7 +181,7 @@ export function EcgTab() {
         </div>
 
         {data?.result && (
-          <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
+          <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
             <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
               <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
                 Результат разбора
@@ -184,21 +211,21 @@ export function EcgTab() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2">
-          <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
-            <IconEcg size={24} className="mx-auto text-emerald-600 dark:text-emerald-400" />
-            <p className="mt-2 text-sm text-slate-700 dark:text-emerald-200/70">
+          <div className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-5 shadow-sm transition-colors duration-200">
+            <IconEcg size={32} className="mx-auto text-slate-600 dark:text-emerald-400" />
+            <p className="mt-3 text-sm text-slate-700 dark:text-emerald-50">
               Анализ за 5–10 секунд
             </p>
           </div>
-          <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
-            <IconExplain size={24} className="mx-auto text-emerald-600 dark:text-emerald-400" />
-            <p className="mt-2 text-sm text-slate-700 dark:text-emerald-200/70">
+          <div className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-5 shadow-sm transition-colors duration-200">
+            <IconExplain size={32} className="mx-auto text-slate-600 dark:text-emerald-400" />
+            <p className="mt-3 text-sm text-slate-700 dark:text-emerald-50">
               Объяснение каждого вывода
             </p>
           </div>
-          <div className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50 rounded-xl p-4 shadow-sm transition-colors duration-200">
-            <IconHistory size={24} className="mx-auto text-emerald-600 dark:text-emerald-400" />
-            <p className="mt-2 text-sm text-slate-700 dark:text-emerald-200/70">
+          <div className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-5 shadow-sm transition-colors duration-200">
+            <IconHistory size={32} className="mx-auto text-slate-600 dark:text-emerald-400" />
+            <p className="mt-3 text-sm text-slate-700 dark:text-emerald-50">
               История исследований
             </p>
           </div>
@@ -208,11 +235,10 @@ export function EcgTab() {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           className={
-            BUTTON +
-            ' inline-flex items-center gap-2 px-6 py-3 text-base mx-auto mt-2'
+            BUTTON + ' inline-flex items-center gap-2 mx-auto mt-2'
           }
         >
-          <IconUpload size={18} />
+          <IconUpload size={20} />
           Загрузить ЭКГ
         </button>
         <input
@@ -222,6 +248,7 @@ export function EcgTab() {
           onChange={onFileChange}
           className="hidden"
         />
+        {fileError && <ErrorBlock message={fileError} />}
       </section>
 
       {recent.length > 0 && (
@@ -233,15 +260,15 @@ export function EcgTab() {
             {recent.map((item) => (
               <div
                 key={item.id}
-                className="bg-white dark:bg-[#121a17] border border-slate-200 dark:border-emerald-900/50
+                className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24]
                            rounded-xl p-3 shadow-sm flex items-center gap-3
                            hover:shadow-md transition-all duration-200"
               >
-                <span className="shrink-0 text-emerald-600 dark:text-emerald-400">
+                <span className="shrink-0 text-slate-500 dark:text-emerald-400">
                   <IconEcg size={20} />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm text-slate-700 dark:text-emerald-200/70 truncate">
+                  <p className="text-sm text-slate-700 dark:text-emerald-50 truncate">
                     {item.request_text ?? 'Изображение ЭКГ'}
                   </p>
                   <p className="text-xs text-slate-400 dark:text-emerald-200/50">

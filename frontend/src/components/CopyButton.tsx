@@ -26,7 +26,7 @@ export function CopyButton({ content }: { content: string }) {
       <button
         type="button"
         onClick={onCopy}
-        className="border border-slate-300 dark:border-emerald-900/50 text-slate-600 dark:text-emerald-200/70 rounded-lg px-2 py-1 text-xs
+        className="border border-slate-300 dark:border-[#1F2E24] text-slate-600 dark:text-emerald-200/70 rounded-lg px-2 py-1 text-xs
                    hover:bg-slate-50 dark:hover:bg-emerald-900/40 hover:text-slate-800 dark:hover:text-emerald-100
                    transition-all duration-200 active:scale-95"
       >
