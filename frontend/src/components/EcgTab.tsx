@@ -10,6 +10,7 @@ import {
   IconEcg,
   IconExplain,
   IconHistory,
+  IconSolver,
   IconUpload,
 } from './icons'
 import { MarkdownView } from './MarkdownView'
@@ -200,32 +201,44 @@ export function EcgTab() {
 
   // ===== Hero-лендинг (файла и результата нет) =====
   return (
-    <div className="space-y-8">
-      <section className="text-center space-y-4 pt-4">
-        <h2 className="text-[34px] leading-tight font-bold text-slate-900 dark:text-emerald-50">
+    <div className="space-y-12">
+      <section className="text-center space-y-6 pt-8 max-w-6xl mx-auto animate-fadeIn">
+        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-emerald-50">
           ИИ-анализ электрокардиограмм
         </h2>
-        <p className="text-base text-slate-500 dark:text-emerald-200/60">
+        <p className="text-lg md:text-xl text-slate-500 dark:text-emerald-100/70 max-w-2xl mx-auto">
           BioPhysLab разбирает снимки ЭКГ и объясняет каждый вывод —
           как врач-биофизик, только быстрее.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2">
-          <div className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-5 shadow-sm transition-colors duration-200">
-            <IconEcg size={32} className="mx-auto text-slate-600 dark:text-emerald-400" />
-            <p className="mt-3 text-sm text-slate-700 dark:text-emerald-50">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4">
+          <div
+            className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fadeIn"
+            style={{ animationDelay: '100ms' }}
+          >
+            <IconEcg size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
+            <p className="text-sm text-slate-700 dark:text-emerald-50">
               Анализ за 5–10 секунд
             </p>
           </div>
-          <div className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-5 shadow-sm transition-colors duration-200">
-            <IconExplain size={32} className="mx-auto text-slate-600 dark:text-emerald-400" />
-            <p className="mt-3 text-sm text-slate-700 dark:text-emerald-50">
+          <div
+            className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fadeIn"
+            style={{ animationDelay: '200ms' }}
+          >
+            <IconExplain size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
+            <p className="text-sm text-slate-700 dark:text-emerald-50">
               Объяснение каждого вывода
             </p>
           </div>
-          <div className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-5 shadow-sm transition-colors duration-200">
-            <IconHistory size={32} className="mx-auto text-slate-600 dark:text-emerald-400" />
-            <p className="mt-3 text-sm text-slate-700 dark:text-emerald-50">
+          <div
+            className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fadeIn"
+            style={{ animationDelay: '300ms' }}
+          >
+            <IconHistory size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
+            <p className="text-sm text-slate-700 dark:text-emerald-50">
               История исследований
             </p>
           </div>
@@ -235,10 +248,15 @@ export function EcgTab() {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           className={
-            BUTTON + ' inline-flex items-center gap-2 mx-auto mt-2'
+            'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg ' +
+            'px-8 py-4 text-lg inline-flex items-center gap-2 mx-auto mt-4 ' +
+            'hover:bg-emerald-700 dark:hover:bg-emerald-400 ' +
+            'hover:scale-105 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] ' +
+            'transition-all duration-300 active:scale-95 animate-fadeIn'
           }
+          style={{ animationDelay: '400ms' }}
         >
-          <IconUpload size={20} />
+          <IconUpload size={22} />
           Загрузить ЭКГ
         </button>
         <input
@@ -249,6 +267,54 @@ export function EcgTab() {
           className="hidden"
         />
         {fileError && <ErrorBlock message={fileError} />}
+      </section>
+
+      {/* ===== Как это работает ===== */}
+      <section className="max-w-6xl mx-auto animate-fadeIn" style={{ animationDelay: '500ms' }}>
+        <h3 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-emerald-50">
+          Как это работает
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+          <div className="flex flex-col items-center text-center p-6 rounded-xl
+                          bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] shadow-sm">
+            <span className="flex items-center justify-center w-10 h-10 rounded-full mb-4
+                             bg-emerald-50 dark:bg-emerald-900/40 text-slate-600 dark:text-emerald-400">
+              <IconUpload size={20} />
+            </span>
+            <p className="text-sm font-medium text-slate-800 dark:text-emerald-50">
+              Загрузите ЭКГ
+            </p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-200/50">
+              PNG или JPG до 5 МБ
+            </p>
+          </div>
+          <div className="flex flex-col items-center text-center p-6 rounded-xl
+                          bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] shadow-sm">
+            <span className="flex items-center justify-center w-10 h-10 rounded-full mb-4
+                             bg-emerald-50 dark:bg-emerald-900/40 text-slate-600 dark:text-emerald-400">
+              <IconSolver size={20} />
+            </span>
+            <p className="text-sm font-medium text-slate-800 dark:text-emerald-50">
+              ИИ анализирует
+            </p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-200/50">
+              Ритм, интервалы, морфологию
+            </p>
+          </div>
+          <div className="flex flex-col items-center text-center p-6 rounded-xl
+                          bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] shadow-sm">
+            <span className="flex items-center justify-center w-10 h-10 rounded-full mb-4
+                             bg-emerald-50 dark:bg-emerald-900/40 text-slate-600 dark:text-emerald-400">
+              <IconExplain size={20} />
+            </span>
+            <p className="text-sm font-medium text-slate-800 dark:text-emerald-50">
+              Получите объяснение
+            </p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-200/50">
+              Понятное, по шагам, с оговорками
+            </p>
+          </div>
+        </div>
       </section>
 
       {recent.length > 0 && (

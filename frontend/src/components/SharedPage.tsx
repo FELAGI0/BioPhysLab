@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { getShared, type SharedResponse } from '../api'
 import { ErrorBlock } from './ErrorBlock'
+import { Background } from './Background'
 import { MarkdownView } from './MarkdownView'
 import { Spinner } from './Spinner'
 
@@ -36,6 +37,7 @@ export function SharedPage({ token }: { token: string }) {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0B0F0C] flex flex-col">
+      <Background />
       <div className="max-w-4xl mx-auto p-6 w-full flex-1">
         <header className="mb-6">
           <div className="flex items-center gap-2">
