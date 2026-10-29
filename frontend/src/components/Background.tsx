@@ -12,7 +12,7 @@ export function Background() {
     >
       {/* Слой 1: очень слабая сетка (3–5%) */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.035] dark:opacity-[0.06]"
         style={{
           backgroundImage:
             'linear-gradient(to right, #10b981 1px, transparent 1px), linear-gradient(to bottom, #10b981 1px, transparent 1px)',

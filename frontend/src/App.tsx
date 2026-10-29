@@ -38,8 +38,8 @@ function HeaderControls() {
         onClick={toggle}
         aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
         title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
-        className="border border-slate-300 dark:border-[#1F2E24] text-slate-600 dark:text-emerald-200/70
-                   rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-emerald-900/40
+        className="border border-slate-300 dark:border-[#1F2E24] text-slate-600 dark:text-slate-200
+                   rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-white/[0.04]
                    transition-all duration-200 active:scale-95"
       >
         <ThemeToggleIcon dark={theme === 'dark'} />
@@ -48,7 +48,7 @@ function HeaderControls() {
       {user ? (
         <>
           <span
-            className="text-xs text-slate-500 dark:text-emerald-200/60 truncate max-w-40 hidden sm:inline"
+            className="text-xs text-slate-500 dark:text-slate-300/70 truncate max-w-40 hidden sm:inline"
             title={user}
           >
             {user}
@@ -56,8 +56,8 @@ function HeaderControls() {
           <button
             type="button"
             onClick={logout}
-            className="border border-slate-300 dark:border-[#1F2E24] text-slate-600 dark:text-emerald-200/70
-                       rounded-lg px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-emerald-900/40
+            className="border border-slate-300 dark:border-[#1F2E24] text-slate-600 dark:text-slate-200
+                       rounded-lg px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-white/[0.04]
                        transition-all duration-200 active:scale-95"
           >
             Выйти
@@ -91,7 +91,7 @@ function AppInner() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0E1511] flex flex-col transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0D1513] flex flex-col transition-colors duration-200">
       <Background />
       <div className="max-w-4xl mx-auto p-6 w-full flex-1">
         <header className="mb-6">
