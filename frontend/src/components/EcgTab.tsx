@@ -10,7 +10,7 @@ import { ShareButton } from './ShareButton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
-  'bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+  'bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 export function EcgTab() {
   const [file, setFile] = useState<File | null>(null)
@@ -36,19 +36,21 @@ export function EcgTab() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white border rounded-xl p-4 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 mb-1">
+          <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Изображение ЭКГ (png/jpg, до 5 МБ)
           </span>
           <input
             type="file"
             accept="image/png,image/jpeg"
             onChange={onFileChange}
-            className="block w-full text-sm text-gray-500
+            className="block w-full text-sm text-gray-500 dark:text-gray-400
                        file:mr-3 file:rounded-lg file:border-0
-                       file:bg-blue-50 file:px-4 file:py-2 file:text-blue-700
-                       hover:file:bg-blue-100"
+                       file:bg-blue-50 dark:file:bg-gray-700
+                       file:px-4 file:py-2 file:text-blue-700 dark:file:text-blue-300
+                       hover:file:bg-blue-100 dark:hover:file:bg-gray-600
+                       file:transition-colors file:duration-200"
           />
         </label>
 
@@ -56,7 +58,7 @@ export function EcgTab() {
           <img
             src={previewUrl}
             alt="Предпросмотр ЭКГ"
-            className="max-h-64 rounded-lg border"
+            className="max-h-64 rounded-lg border border-gray-200 dark:border-gray-700"
           />
         )}
 
@@ -76,13 +78,15 @@ export function EcgTab() {
       </div>
 
       {data?.result && (
-        <div className="bg-white border rounded-xl p-4 shadow-sm">
-          <div className="flex items-center justify-between gap-2 mb-2">
-            <h3 className="text-sm font-semibold text-gray-700">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm transition-colors duration-200">
+          <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
               Результат разбора
             </h3>
-            <CopyButton content={data.result} />
-            {data.id != null && <ShareButton id={data.id} />}
+            <div className="flex gap-2">
+              <CopyButton content={data.result} />
+              {data.id != null && <ShareButton id={data.id} />}
+            </div>
           </div>
           <MarkdownView content={data.result} />
         </div>

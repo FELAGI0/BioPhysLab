@@ -35,16 +35,16 @@ export function SharedPage({ token }: { token: string }) {
   }, [token])
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       <div className="max-w-4xl mx-auto p-6 w-full flex-1">
         <header className="mb-6">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-gray-900">BioPhysLab</h1>
-            <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">BioPhysLab</h1>
+            <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs px-2 py-1 rounded">
               MVP
             </span>
           </div>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Поделившийся результат · ИИ-помощник по биофизике
           </p>
         </header>
@@ -54,18 +54,18 @@ export function SharedPage({ token }: { token: string }) {
           {error && <ErrorBlock message={error} />}
 
           {data && (
-            <div className="bg-white border rounded-xl p-4 shadow-sm">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm transition-colors duration-200">
               <div className="flex items-center gap-2 mb-3">
-                <span className="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded">
+                <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded">
                   {data.module_title}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-400 dark:text-gray-500 dark:text-gray-500">
                   {formatDate(data.created_at)}
                 </span>
               </div>
 
-              <h2 className="text-sm font-semibold text-gray-700 mb-1">Запрос</h2>
-              <p className="text-sm text-gray-600 mb-4 whitespace-pre-wrap">
+              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Запрос</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 whitespace-pre-wrap">
                 {data.request_text ?? '—'}
               </p>
 
@@ -76,8 +76,8 @@ export function SharedPage({ token }: { token: string }) {
         </main>
       </div>
 
-      <footer className="border-t border-gray-200 bg-white py-4">
-        <p className="max-w-4xl mx-auto px-6 text-xs text-gray-400">
+      <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 transition-colors duration-200">
+        <p className="max-w-4xl mx-auto px-6 text-xs text-gray-400 dark:text-gray-500 dark:text-gray-500">
           Проект не заменяет консультацию врача. © 2026 BioPhysLab.
         </p>
       </footer>

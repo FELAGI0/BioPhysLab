@@ -23,6 +23,14 @@ const FAQ_ITEMS: { title: string; text: string }[] = [
     title: 'Все запросы анонимны',
     text: 'Мы не собираем персональные данные — только агрегированную статистику.',
   },
+  {
+    title: 'Авторизация',
+    text: 'Позволяет сохранять историю запросов и получать доступ к ней с любого устройства. Пароли хранятся в зашифрованном виде.',
+  },
+  {
+    title: 'Ключ API нейросети хранится только на сервере',
+    text: 'Ваши запросы не содержат персональных данных.',
+  },
 ]
 
 export function FaqModal({ onClose }: { onClose: () => void }) {
@@ -31,11 +39,11 @@ export function FaqModal({ onClose }: { onClose: () => void }) {
       <ul className="space-y-3">
         {FAQ_ITEMS.map((item) => (
           <li key={item.title} className="flex gap-2">
-            <span className="text-blue-600 mt-0.5" aria-hidden="true">
+            <span className="text-blue-600 dark:text-blue-400 mt-0.5" aria-hidden="true">
               •
             </span>
             <span>
-              <strong className="text-gray-900">{item.title}.</strong>{' '}
+              <strong className="text-gray-900 dark:text-white">{item.title}.</strong>{' '}
               {item.text}
             </span>
           </li>
