@@ -44,19 +44,19 @@ export function StatsTab() {
       {data && (
         <div key={loading ? 'loading' : 'ready'} className="space-y-4 animate-fadeIn">
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
+        <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  text-center transition-colors duration-200">
           <div className="text-3xl font-bold text-slate-500 dark:text-emerald-400">
             {data?.total_sessions ?? '—'}
           </div>
           <div className="mt-1 text-xs text-slate-500 dark:text-emerald-200/60">Всего сессий</div>
         </div>
-        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
+        <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  text-center transition-colors duration-200">
           <div className="text-3xl font-bold text-slate-500 dark:text-emerald-400">
             {data?.total_requests ?? '—'}
           </div>
           <div className="mt-1 text-xs text-slate-500 dark:text-emerald-200/60">Всего запросов</div>
         </div>
-        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm text-center transition-colors duration-200">
+        <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  text-center transition-colors duration-200">
           <div className="text-3xl font-bold text-slate-500 dark:text-emerald-400">
             {data ? Object.keys(data.by_module).length : '—'}
           </div>
@@ -66,7 +66,7 @@ export function StatsTab() {
 
       {data && (
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
+          <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  transition-colors duration-200">
             <h3 className="mb-2 text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
               Запросы по модулям
             </h3>
@@ -84,7 +84,7 @@ export function StatsTab() {
             </table>
           </div>
 
-          <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
+          <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  transition-colors duration-200">
             <h3 className="mb-2 text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
               Среднее время ответа
             </h3>

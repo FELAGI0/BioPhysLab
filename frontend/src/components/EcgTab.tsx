@@ -10,7 +10,6 @@ import {
   IconEcg,
   IconExplain,
   IconHistory,
-  IconSolver,
   IconUpload,
 } from './icons'
 import { MarkdownView } from './MarkdownView'
@@ -107,6 +106,8 @@ export function EcgTab() {
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault()
+    // stopPropagation: чтобы событие не всплывло и браузер не открыл файл.
+    e.stopPropagation()
     dragCounter.current = 0
     setDragActive(false)
     acceptFile(e.dataTransfer.files?.[0] ?? null)
@@ -116,7 +117,7 @@ export function EcgTab() {
   if (file || data?.result) {
     return (
       <div className="space-y-4">
-        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
+        <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  space-y-4 transition-colors duration-200">
           {/* Зона загрузки (drag & drop), крупная */}
           <div
             role="button"
@@ -134,7 +135,7 @@ export function EcgTab() {
               'flex flex-col items-center justify-center gap-2 min-h-[200px] p-6 rounded-xl cursor-pointer ' +
               'border-2 border-dashed border-slate-300 dark:border-[#1F2E24] transition-colors duration-200 ' +
               (dragActive
-                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30'
                 : 'hover:border-emerald-400 dark:hover:border-emerald-700')
             }
           >
@@ -182,7 +183,7 @@ export function EcgTab() {
         </div>
 
         {data?.result && (
-          <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
+          <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  transition-colors duration-200">
             <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
               <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
                 Результат разбора
@@ -213,8 +214,8 @@ export function EcgTab() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4">
           <div
-            className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6
+                       hover:-translate-y-1 transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '100ms' }}
           >
             <IconEcg size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
@@ -223,8 +224,8 @@ export function EcgTab() {
             </p>
           </div>
           <div
-            className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6
+                       hover:-translate-y-1 transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '200ms' }}
           >
             <IconExplain size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
@@ -233,8 +234,8 @@ export function EcgTab() {
             </p>
           </div>
           <div
-            className="bg-white dark:bg-[#18231C] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6
+                       hover:-translate-y-1 transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '300ms' }}
           >
             <IconHistory size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
@@ -251,7 +252,7 @@ export function EcgTab() {
             'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg ' +
             'px-8 py-4 text-lg inline-flex items-center gap-2 mx-auto mt-4 ' +
             'hover:bg-emerald-700 dark:hover:bg-emerald-400 ' +
-            'hover:scale-105 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] ' +
+            'hover:scale-105 ' +
             'transition-all duration-300 active:scale-95 animate-fadeIn'
           }
           style={{ animationDelay: '400ms' }}
@@ -269,54 +270,6 @@ export function EcgTab() {
         {fileError && <ErrorBlock message={fileError} />}
       </section>
 
-      {/* ===== Как это работает ===== */}
-      <section className="max-w-6xl mx-auto animate-fadeIn" style={{ animationDelay: '500ms' }}>
-        <h3 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-emerald-50">
-          Как это работает
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-          <div className="flex flex-col items-center text-center p-6 rounded-xl
-                          bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] shadow-sm">
-            <span className="flex items-center justify-center w-10 h-10 rounded-full mb-4
-                             bg-emerald-50 dark:bg-emerald-900/40 text-slate-600 dark:text-emerald-400">
-              <IconUpload size={20} />
-            </span>
-            <p className="text-sm font-medium text-slate-800 dark:text-emerald-50">
-              Загрузите ЭКГ
-            </p>
-            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-200/50">
-              PNG или JPG до 5 МБ
-            </p>
-          </div>
-          <div className="flex flex-col items-center text-center p-6 rounded-xl
-                          bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] shadow-sm">
-            <span className="flex items-center justify-center w-10 h-10 rounded-full mb-4
-                             bg-emerald-50 dark:bg-emerald-900/40 text-slate-600 dark:text-emerald-400">
-              <IconSolver size={20} />
-            </span>
-            <p className="text-sm font-medium text-slate-800 dark:text-emerald-50">
-              ИИ анализирует
-            </p>
-            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-200/50">
-              Ритм, интервалы, морфологию
-            </p>
-          </div>
-          <div className="flex flex-col items-center text-center p-6 rounded-xl
-                          bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] shadow-sm">
-            <span className="flex items-center justify-center w-10 h-10 rounded-full mb-4
-                             bg-emerald-50 dark:bg-emerald-900/40 text-slate-600 dark:text-emerald-400">
-              <IconExplain size={20} />
-            </span>
-            <p className="text-sm font-medium text-slate-800 dark:text-emerald-50">
-              Получите объяснение
-            </p>
-            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-200/50">
-              Понятное, по шагам, с оговорками
-            </p>
-          </div>
-        </div>
-      </section>
-
       {recent.length > 0 && (
         <section className="space-y-3">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
@@ -326,8 +279,8 @@ export function EcgTab() {
             {recent.map((item) => (
               <div
                 key={item.id}
-                className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24]
-                           rounded-xl p-3 shadow-sm flex items-center gap-3
+                className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24]
+                           rounded-xl p-3  flex items-center gap-3
                            hover:shadow-md transition-all duration-200"
               >
                 <span className="shrink-0 text-slate-500 dark:text-emerald-400">

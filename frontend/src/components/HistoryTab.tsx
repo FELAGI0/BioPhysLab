@@ -122,7 +122,7 @@ export function HistoryTab() {
       {error && <ErrorBlock message={error} />}
 
       {items.length === 0 && !loading && !error && (
-        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm text-sm text-slate-500 dark:text-emerald-200/60 text-center transition-colors duration-200">
+        <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  text-sm text-slate-500 dark:text-emerald-200/60 text-center transition-colors duration-200">
           История пуста — сделайте запрос во вкладках «ЭКГ», «Задачи»
           или «Объяснения».
         </div>
@@ -133,8 +133,8 @@ export function HistoryTab() {
           {items.map((item) => (
         <div
           key={item.id}
-          className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24]
-                     rounded-xl p-4 shadow-sm hover:shadow-md
+          className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24]
+                     rounded-xl p-4  hover:shadow-md
                      transition-all duration-200"
         >
           <div className="flex items-start justify-between gap-2 flex-wrap">

@@ -14,7 +14,7 @@ export function SkeletonBlock({ className = '' }: { className?: string }) {
 /** Skeleton карточки истории (бейдж + дата + 2 строки текста + кнопки). */
 export function HistoryCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm">
+    <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 ">
       <div className="flex gap-2 items-center">
         <SkeletonBlock className="h-4 w-16" />
         <SkeletonBlock className="h-3 w-32" />
@@ -37,8 +37,8 @@ export function StatsSkeleton() {
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24]
-                       rounded-xl p-4 shadow-sm text-center"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24]
+                       rounded-xl p-4  text-center"
           >
             <SkeletonBlock className="h-8 w-16 mx-auto" />
             <SkeletonBlock className="h-3 w-20 mx-auto mt-2" />
@@ -49,8 +49,8 @@ export function StatsSkeleton() {
         {[0, 1].map((i) => (
           <div
             key={i}
-            className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24]
-                       rounded-xl p-4 shadow-sm space-y-2"
+            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24]
+                       rounded-xl p-4  space-y-2"
           >
             <SkeletonBlock className="h-4 w-40" />
             <SkeletonBlock className="h-3 w-full" />

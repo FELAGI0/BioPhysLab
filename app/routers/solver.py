@@ -14,7 +14,7 @@ from app.deps import (
     rate_limit,
 )
 from app.models import ModuleName, Session, User
-from app.prompts import SOLVER_PROMPT
+from app.prompts import OFF_TOPIC_MARKER, SOLVER_PROMPT
 from app.services.ai_client import ask_ai
 
 router = APIRouter(tags=["solver"])
@@ -41,6 +41,10 @@ async def solve_task(
     started = time.monotonic()
     result = await ask_ai(SOLVER_PROMPT.format(task=body.task), module="solver")
     duration_ms = round((time.monotonic() - started) * 1000)
+
+    # Safety guard: off-topic запрос не сохраняется в историю.
+    if result.startswith(OFF_TOPIC_MARKER):
+        return {"result": result, "id": None}
 
     entry = await log_usage(
         db,

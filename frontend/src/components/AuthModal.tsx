@@ -79,7 +79,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="student@example.com"
-            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50 p-2 text-sm
+            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] bg-white dark:bg-[#121A15] text-slate-900 dark:text-emerald-50 p-2 text-sm
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
           />
         </label>
@@ -95,7 +95,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Минимум 6 символов"
-            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50 p-2 text-sm
+            className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] bg-white dark:bg-[#121A15] text-slate-900 dark:text-emerald-50 p-2 text-sm
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
           />
         </label>

@@ -15,7 +15,7 @@ from app.deps import (
     rate_limit,
 )
 from app.models import ModuleName, Session, User
-from app.prompts import EXPLAIN_PROMPT
+from app.prompts import EXPLAIN_PROMPT, OFF_TOPIC_MARKER
 from app.services.ai_client import ask_ai
 
 router = APIRouter(tags=["explain"])
@@ -47,6 +47,10 @@ async def explain_topic(
         EXPLAIN_PROMPT.format(topic=body.topic, level=body.level), module="explain"
     )
     duration_ms = round((time.monotonic() - started) * 1000)
+
+    # Safety guard: off-topic запрос не сохраняется в историю.
+    if result.startswith(OFF_TOPIC_MARKER):
+        return {"result": result, "id": None}
 
     entry = await log_usage(
         db,

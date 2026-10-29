@@ -1,8 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- BioPhysLab: сердце с кардиограммой, лабораторный emerald -->
-  <path d="M32 56 C 14 44, 6 34, 6 24 C 6 15, 13 9, 21 9 C 26 9, 30 11.5, 32 15 C 34 11.5, 38 9, 43 9 C 51 9, 58 15, 58 24 C 58 34, 50 44, 32 56 Z"
+  <!-- BioPhysLab: сердце с кардиограммой. Тёмная тема: светлая заливка. -->
+  <style>
+    @media (prefers-color-scheme: dark) {
+      .heart { fill: #34d399; }
+      .ekg { stroke: #062f24; }
+    }
+  </style>
+  <path class="heart" d="M32 56 C 14 44, 6 34, 6 24 C 6 15, 13 9, 21 9 C 26 9, 30 11.5, 32 15 C 34 11.5, 38 9, 43 9 C 51 9, 58 15, 58 24 C 58 34, 50 44, 32 56 Z"
         fill="#10b981"/>
-  <path d="M14 32 H 24 L 27 24 L 31 40 L 35 28 L 37 32 H 50"
+  <path class="ekg" d="M14 32 H 24 L 27 24 L 31 40 L 35 28 L 37 32 H 50"
         fill="none" stroke="#062f24" stroke-width="4"
         stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

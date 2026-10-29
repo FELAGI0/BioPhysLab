@@ -14,7 +14,7 @@ from app.deps import (
     rate_limit,
 )
 from app.models import ModuleName, Session, User
-from app.prompts import ECG_PROMPT
+from app.prompts import ECG_PROMPT, OFF_TOPIC_MARKER
 from app.services.ai_client import ask_ai
 
 router = APIRouter(tags=["ecg"])
@@ -58,6 +58,10 @@ async def analyze_ecg(
     started = time.monotonic()
     result = await ask_ai(ECG_PROMPT, image_b64=image_b64, module="ecg")
     duration_ms = round((time.monotonic() - started) * 1000)
+
+    # Safety guard: off-topic изображение не сохраняется в историю.
+    if result.startswith(OFF_TOPIC_MARKER):
+        return {"result": result, "id": None}
 
     entry = await log_usage(
         db,

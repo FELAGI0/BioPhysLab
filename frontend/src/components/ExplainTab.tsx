@@ -31,7 +31,7 @@ export function ExplainTab() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
+      <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  space-y-4 transition-colors duration-200">
         <label className="block">
           <span className="block text-sm font-medium text-slate-700 dark:text-emerald-200/70 mb-1">
             Явление или понятие
@@ -42,7 +42,7 @@ export function ExplainTab() {
             onChange={(e) => setTopic(e.target.value.slice(0, 200))}
             placeholder="Например: диффузия, потенциал покоя, ультразвук"
             className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] p-2 text-sm
-                       bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50 placeholder-slate-400 dark:placeholder-emerald-200/40
+                       bg-white dark:bg-[#121A15] text-slate-900 dark:text-emerald-50 placeholder-slate-400 dark:placeholder-emerald-200/40
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-colors duration-200"
           />
         </label>
@@ -57,7 +57,7 @@ export function ExplainTab() {
               setLevel(e.target.value as (typeof LEVELS)[number])
             }
             className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] p-2 text-sm
-                       bg-white dark:bg-[#0B0F0C] text-slate-900 dark:text-emerald-50
+                       bg-white dark:bg-[#121A15] text-slate-900 dark:text-emerald-50
                        focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-colors duration-200"
           >
             {LEVELS.map((l) => (
@@ -100,7 +100,7 @@ export function ExplainTab() {
       </div>
 
       {data?.result && (
-        <div className="bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4 shadow-sm transition-colors duration-200">
+        <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  transition-colors duration-200">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
             <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
               Объяснение ({level})

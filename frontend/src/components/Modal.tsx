@@ -41,7 +41,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
     >
       <div
         className={
-          'bg-white dark:bg-[#141C17] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6 shadow-lg ' +
+          'bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-6  ' +
           'max-w-lg w-full max-h-[80vh] overflow-y-auto transition-transform duration-200 ' +
           (visible ? 'scale-100' : 'scale-95')
         }

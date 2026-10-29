@@ -90,7 +90,7 @@ function AppInner() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0B0F0C] flex flex-col transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0E1511] flex flex-col transition-colors duration-200">
       <Background />
       <div className="max-w-4xl mx-auto p-6 w-full flex-1">
         <header className="mb-6">
@@ -126,7 +126,7 @@ function AppInner() {
         </main>
       </div>
 
-      <footer className="border-t border-slate-200 dark:border-emerald-900/30 bg-white dark:bg-[#141C17] py-8 transition-colors duration-200">
+      <footer className="border-t border-slate-200 dark:border-emerald-900/30 bg-white dark:bg-[#16201A] py-8 transition-colors duration-200">
         <div className="max-w-4xl mx-auto px-6 text-xs text-slate-400 dark:text-emerald-200/50 flex flex-col items-center gap-3 text-center">
           <p>Проект не заменяет консультацию врача. © 2026 BioPhysLab.</p>
           <nav className="flex gap-6" aria-label="Информация о проекте">
