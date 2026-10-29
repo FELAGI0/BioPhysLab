@@ -4,17 +4,25 @@ import { useState } from 'react'
 import { EcgTab } from './components/EcgTab'
 import { ExplainTab } from './components/ExplainTab'
 import { FaqModal } from './components/FaqModal'
+import { HistoryTab } from './components/HistoryTab'
 import { LicenseModal } from './components/LicenseModal'
+import { SharedPage } from './components/SharedPage'
 import { SolverTab } from './components/SolverTab'
 import { StatsTab } from './components/StatsTab'
 import { Tabs } from './components/Tabs'
 
-const TABS = ['ЭКГ', 'Задачи', 'Объяснения', 'Статистика'] as const
+const TABS = ['ЭКГ', 'Задачи', 'Объяснения', 'Статистика', 'История'] as const
 type Tab = (typeof TABS)[number]
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('ЭКГ')
   const [modal, setModal] = useState<'faq' | 'license' | null>(null)
+
+  // Простой роутинг без react-router: /shared/{token} — публичная страница.
+  if (window.location.pathname.startsWith('/shared/')) {
+    const token = window.location.pathname.slice('/shared/'.length)
+    return <SharedPage token={token} />
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -44,6 +52,7 @@ function App() {
           {activeTab === 'Задачи' && <SolverTab />}
           {activeTab === 'Объяснения' && <ExplainTab />}
           {activeTab === 'Статистика' && <StatsTab />}
+          {activeTab === 'История' && <HistoryTab />}
         </main>
       </div>
 

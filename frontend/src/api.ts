@@ -6,6 +6,40 @@
 /** Форма ответа AI-модулей. */
 export interface AiResult {
   result: string
+  id?: number
+}
+
+/** Форма ответа GET /api/stats. */
+export interface StatsResponse {
+  total_sessions: number
+  total_requests: number
+  by_module: Record<string, number>
+  avg_duration_ms_by_module: Record<string, number>
+}
+
+/** Один элемент истории. */
+export interface HistoryItem {
+  id: number
+  module: string
+  module_title: string
+  request_text: string | null
+  response_text: string | null
+  created_at: string | null
+  share_token: string | null
+}
+
+/** Форма ответа GET /api/history. */
+export interface HistoryResponse {
+  items: HistoryItem[]
+}
+
+/** Форма ответа GET /api/shared/{token}. */
+export interface SharedResponse {
+  module: string
+  module_title: string
+  request_text: string | null
+  response_text: string | null
+  created_at: string | null
 }
 
 /** Форма ответа GET /api/stats. */
@@ -83,3 +117,56 @@ export async function getStats(): Promise<StatsResponse> {
   }
   return response.json()
 }
+
+/** GET /api/history — последние 20 записей текущей сессии. */
+export async function getHistory(): Promise<HistoryResponse> {
+  const response = await fetch('/api/history')
+  if (!response.ok) {
+    await handleError(response)
+  }
+  return response.json()
+}
+
+/** DELETE /api/history — удалить все записи текущей сессии. */
+export async function clearHistory(): Promise<void> {
+  const response = await fetch('/api/history', { method: 'DELETE' })
+  if (!response.ok) {
+    await handleError(response)
+  }
+}
+
+/** POST /api/history/{id}/share — получить ссылку для шаринга. */
+export async function shareResult(id: number): Promise<{ url: string }> {
+  const response = await fetch(`/api/history/${id}/share`, { method: 'POST' })
+  if (!response.ok) {
+    await handleError(response)
+  }
+  return response.json()
+}
+
+/** GET /api/shared/{token} — публичный просмотр записи по токену. */
+export async function getShared(token: string): Promise<SharedResponse> {
+  const response = await fetch(`/api/shared/${token}`)
+  if (!response.ok) {
+    await handleError(response)
+  }
+  return response.json()
+}
+
+/** GET /api/history/{id}/pdf — скачать PDF с результатом (blob + временная ссылка). */
+export async function downloadPdf(id: number): Promise<void> {
+  const response = await fetch(`/api/history/${id}/pdf`)
+  if (!response.ok) {
+    await handleError(response)
+  }
+  const blob = await response.blob()
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'biophyslab_result.pdf'
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+

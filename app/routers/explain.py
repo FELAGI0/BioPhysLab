@@ -42,5 +42,12 @@ async def explain_topic(
     )
     duration_ms = round((time.monotonic() - started) * 1000)
 
-    await log_usage(db, session.id, ModuleName.explain, duration_ms)
-    return {"result": result}
+    entry = await log_usage(
+        db,
+        session.id,
+        ModuleName.explain,
+        duration_ms,
+        request_text=f"{body.topic} (уровень: {body.level})",
+        response_text=result,
+    )
+    return {"result": result, "id": entry.id}

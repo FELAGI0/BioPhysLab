@@ -54,11 +54,25 @@ async def get_or_create_session(
 
 
 async def log_usage(
-    db: AsyncSession, session_id: str, module: ModuleName, duration_ms: int | None
-) -> None:
-    """Записывает в usage_logs один вызов AI-модуля (для статистики)."""
-    db.add(UsageLog(session_id=session_id, module=module, duration_ms=duration_ms))
+    db: AsyncSession,
+    session_id: str,
+    module: ModuleName,
+    duration_ms: int | None,
+    request_text: str | None = None,
+    response_text: str | None = None,
+) -> UsageLog:
+    """Записывает в usage_logs один вызов AI-модуля и возвращает созданную запись."""
+    entry = UsageLog(
+        session_id=session_id,
+        module=module,
+        duration_ms=duration_ms,
+        request_text=request_text,
+        response_text=response_text,
+    )
+    db.add(entry)
     await db.commit()
+    await db.refresh(entry)
+    return entry
 
 
 def rate_limit(cookie_id: str) -> None:

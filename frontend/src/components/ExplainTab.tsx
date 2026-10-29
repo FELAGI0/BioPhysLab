@@ -6,6 +6,7 @@ import { useAsync } from '../hooks/useAsync'
 import { CopyButton } from './CopyButton'
 import { ErrorBlock } from './ErrorBlock'
 import { MarkdownView } from './MarkdownView'
+import { ShareButton } from './ShareButton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
@@ -80,6 +81,7 @@ export function ExplainTab() {
               Объяснение ({level})
             </h3>
             <CopyButton content={data.result} />
+            {data.id != null && <ShareButton id={data.id} />}
           </div>
           <MarkdownView content={data.result} />
         </div>

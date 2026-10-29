@@ -36,5 +36,12 @@ async def solve_task(
     result = await ask_ai(SOLVER_PROMPT.format(task=body.task), module="solver")
     duration_ms = round((time.monotonic() - started) * 1000)
 
-    await log_usage(db, session.id, ModuleName.solver, duration_ms)
-    return {"result": result}
+    entry = await log_usage(
+        db,
+        session.id,
+        ModuleName.solver,
+        duration_ms,
+        request_text=body.task,
+        response_text=result,
+    )
+    return {"result": result, "id": entry.id}

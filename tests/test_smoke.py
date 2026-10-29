@@ -92,7 +92,10 @@ async def test_ecg_mock(client):
         resp = await client.post("/api/ecg", files=files)
 
     assert resp.status_code == 200
-    assert resp.json() == {"result": "Анализ ЭКГ: ритм синусовый, 70 уд/мин."}
+    body = resp.json()
+    assert body["result"] == "Анализ ЭКГ: ритм синусовый, 70 уд/мин."
+    # id присутствует (None с замоканной БД, число — с реальной)
+    assert "id" in body
 
 
 @pytest.mark.asyncio

@@ -53,5 +53,12 @@ async def analyze_ecg(
     result = await ask_ai(ECG_PROMPT, image_b64=image_b64, module="ecg")
     duration_ms = round((time.monotonic() - started) * 1000)
 
-    await log_usage(db, session.id, ModuleName.ecg, duration_ms)
-    return {"result": result}
+    entry = await log_usage(
+        db,
+        session.id,
+        ModuleName.ecg,
+        duration_ms,
+        request_text="Изображение ЭКГ (jpg/png)",
+        response_text=result,
+    )
+    return {"result": result, "id": entry.id}
