@@ -41,25 +41,25 @@ export function Modal({ title, onClose, children }: ModalProps) {
     >
       <div
         className={
-          'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-lg ' +
+          'bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-6 shadow-lg ' +
           'max-w-lg w-full max-h-[80vh] overflow-y-auto transition-transform duration-200 ' +
           (visible ? 'scale-100' : 'scale-95')
         }
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4 mb-4">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">{title}</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Закрыть окно"
-            className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300
+            className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-gray-300
                        text-xl leading-none transition-all duration-200 active:scale-95"
           >
             ×
           </button>
         </div>
-        <div className="text-sm text-gray-700 dark:text-gray-300">{children}</div>
+        <div className="text-sm text-gray-700 dark:text-slate-300">{children}</div>
         <div className="mt-6 text-right">
           <button
             type="button"

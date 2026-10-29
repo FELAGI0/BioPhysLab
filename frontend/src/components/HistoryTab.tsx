@@ -10,13 +10,14 @@ import {
 } from '../api'
 import { ErrorBlock } from './ErrorBlock'
 import { MarkdownView } from './MarkdownView'
+import { HistoryCardSkeleton } from './Skeleton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
   'bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 const SMALL_BUTTON =
-  'border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 rounded-lg px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-100 transition-all duration-200 active:scale-95'
+  'border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 rounded-lg px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-800 dark:hover:text-gray-100 transition-all duration-200 active:scale-95'
 
 /** Обрезает длинный текст запроса для карточки истории. */
 function truncate(text: string | null, max = 120): string {
@@ -91,7 +92,7 @@ export function HistoryTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-gray-500 dark:text-slate-400">
           Последние 20 запросов этой сессии
         </p>
         <div className="flex gap-2">
@@ -109,20 +110,30 @@ export function HistoryTab() {
         </div>
       </div>
 
-      {loading && <Spinner text="Загружаем историю..." />}
+      {/* Skeleton при первой загрузке (данных ещё не было) — вместо резкого появления. */}
+      {loading && items.length === 0 && !error && (
+        <div className="space-y-4">
+          {[0, 1, 2].map((i) => (
+            <HistoryCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
+      {loading && items.length > 0 && <Spinner text="Загружаем историю..." />}
       {error && <ErrorBlock message={error} />}
 
       {items.length === 0 && !loading && !error && (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm text-sm text-gray-500 dark:text-gray-400 text-center transition-colors duration-200">
+        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 shadow-sm text-sm text-gray-500 dark:text-slate-400 text-center transition-colors duration-200">
           История пуста — сделайте запрос во вкладках «ЭКГ», «Задачи»
           или «Объяснения».
         </div>
       )}
 
-      {items.map((item) => (
+      {items.length > 0 && (
+        <div key={items.length} className="animate-fadeIn">
+          {items.map((item) => (
         <div
           key={item.id}
-          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+          className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700
                      rounded-xl p-4 shadow-sm hover:shadow-md
                      transition-all duration-200"
         >
@@ -131,10 +142,10 @@ export function HistoryTab() {
               <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded">
                 {item.module_title}
               </span>
-              <span className="ml-2 text-xs text-gray-400 dark:text-gray-500">
+              <span className="ml-2 text-xs text-gray-400 dark:text-slate-500">
                 {formatDate(item.created_at)}
               </span>
-              <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 break-words">
+              <p className="mt-1 text-sm text-gray-700 dark:text-slate-300 break-words">
                 {truncate(item.request_text)}
               </p>
             </div>
@@ -167,12 +178,14 @@ export function HistoryTab() {
           </div>
 
           {expandedId === item.id && item.response_text && (
-            <div className="mt-3 border-t border-gray-100 dark:border-gray-700 pt-3">
+            <div className="mt-3 border-t border-gray-100 dark:border-slate-700 pt-3">
               <MarkdownView content={item.response_text} />
             </div>
           )}
         </div>
-      ))}
+          ))}
+        </div>
+      )}
     </div>
   )
 }

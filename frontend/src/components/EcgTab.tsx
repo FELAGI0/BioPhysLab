@@ -36,18 +36,18 @@ export function EcgTab() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
+      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-4 transition-colors duration-200">
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
             Изображение ЭКГ (png/jpg, до 5 МБ)
           </span>
           <input
             type="file"
             accept="image/png,image/jpeg"
             onChange={onFileChange}
-            className="block w-full text-sm text-gray-500 dark:text-gray-400
+            className="block w-full text-sm text-gray-500 dark:text-slate-400
                        file:mr-3 file:rounded-lg file:border-0
-                       file:bg-blue-50 dark:file:bg-gray-700
+                       file:bg-blue-50 dark:file:bg-slate-700
                        file:px-4 file:py-2 file:text-blue-700 dark:file:text-blue-300
                        hover:file:bg-blue-100 dark:hover:file:bg-gray-600
                        file:transition-colors file:duration-200"
@@ -58,7 +58,7 @@ export function EcgTab() {
           <img
             src={previewUrl}
             alt="Предпросмотр ЭКГ"
-            className="max-h-64 rounded-lg border border-gray-200 dark:border-gray-700"
+            className="max-h-64 rounded-lg border border-gray-200 dark:border-slate-700"
           />
         )}
 
@@ -78,9 +78,9 @@ export function EcgTab() {
       </div>
 
       {data?.result && (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm transition-colors duration-200">
+        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 shadow-sm transition-colors duration-200">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-slate-300">
               Результат разбора
             </h3>
             <div className="flex gap-2">

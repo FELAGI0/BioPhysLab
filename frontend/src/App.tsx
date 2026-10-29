@@ -47,8 +47,8 @@ function HeaderControls() {
         onClick={toggle}
         aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
         title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
-        className="border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300
-                   rounded-lg p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700
+        className="border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300
+                   rounded-lg p-1.5 hover:bg-gray-100 dark:hover:bg-slate-700
                    transition-all duration-200 active:scale-95"
       >
         <ThemeToggleIcon dark={theme === 'dark'} />
@@ -57,7 +57,7 @@ function HeaderControls() {
       {user ? (
         <>
           <span
-            className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-40 hidden sm:inline"
+            className="text-xs text-gray-500 dark:text-slate-400 truncate max-w-40 hidden sm:inline"
             title={user}
           >
             {user}
@@ -65,8 +65,8 @@ function HeaderControls() {
           <button
             type="button"
             onClick={logout}
-            className="border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300
-                       rounded-lg px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700
+            className="border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300
+                       rounded-lg px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-slate-700
                        transition-all duration-200 active:scale-95"
           >
             Выйти
@@ -100,18 +100,18 @@ function AppInner() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors duration-200">
       <div className="max-w-4xl mx-auto p-6 w-full flex-1">
         <header className="mb-6">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
               BioPhysLab
             </h1>
             <div className="ml-auto">
               <HeaderControls />
             </div>
           </div>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
             ИИ-помощник по биофизике
           </p>
         </header>
@@ -134,8 +134,8 @@ function AppInner() {
         </main>
       </div>
 
-      <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 transition-colors duration-200">
-        <div className="max-w-4xl mx-auto px-6 text-xs text-gray-400 dark:text-gray-500 flex flex-wrap items-center gap-x-4 gap-y-1 justify-between">
+      <footer className="border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 py-4 transition-colors duration-200">
+        <div className="max-w-4xl mx-auto px-6 text-xs text-gray-400 dark:text-slate-500 flex flex-wrap items-center gap-x-4 gap-y-1 justify-between">
           <p>Проект не заменяет консультацию врача. © 2026 BioPhysLab.</p>
           <nav className="flex gap-4" aria-label="Информация о проекте">
             <button

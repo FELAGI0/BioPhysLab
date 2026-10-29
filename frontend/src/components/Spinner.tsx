@@ -2,9 +2,9 @@
 
 export function Spinner({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 animate-pulse">
+    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400 animate-pulse">
       <span
-        className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-gray-300 dark:border-gray-600 border-t-blue-600"
+        className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-gray-300 dark:border-slate-600 border-t-blue-600"
         aria-hidden="true"
       />
       {text}

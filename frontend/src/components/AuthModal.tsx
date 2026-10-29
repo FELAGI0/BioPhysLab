@@ -50,7 +50,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
               'px-3 py-1.5 text-sm rounded-lg transition-colors ' +
               (isLogin
                 ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600')
+                : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600')
             }
           >
             Вход
@@ -62,7 +62,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
               'px-3 py-1.5 text-sm rounded-lg transition-colors ' +
               (!isLogin
                 ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600')
+                : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600')
             }
           >
             Регистрация
@@ -70,7 +70,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
         </div>
 
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
             Email
           </span>
           <input
@@ -79,13 +79,13 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="student@example.com"
-            className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 text-sm
+            className="block w-full rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2 text-sm
                        focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </label>
 
         <label className="block">
-          <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <span className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
             Пароль
           </span>
           <input
@@ -95,7 +95,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Минимум 6 символов"
-            className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 text-sm
+            className="block w-full rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2 text-sm
                        focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </label>

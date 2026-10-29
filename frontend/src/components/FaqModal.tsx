@@ -43,7 +43,7 @@ export function FaqModal({ onClose }: { onClose: () => void }) {
               •
             </span>
             <span>
-              <strong className="text-gray-900 dark:text-white">{item.title}.</strong>{' '}
+              <strong className="text-gray-900 dark:text-slate-100">{item.title}.</strong>{' '}
               {item.text}
             </span>
           </li>
