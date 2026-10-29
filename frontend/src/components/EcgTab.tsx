@@ -17,7 +17,7 @@ import { ShareButton } from './ShareButton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
-  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg px-6 py-3 text-base hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
+  'bg-gradient-to-r from-emerald-500 to-teal-500 font-semibold text-white rounded-lg px-6 py-3 text-base hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024 // 5 МБ
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
@@ -210,7 +210,7 @@ export function EcgTab() {
   return (
     <div className="space-y-12">
       <section className="text-center space-y-6 pt-8 max-w-6xl mx-auto animate-fadeIn">
-        <h2 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-emerald-50">
+        <h2 className="bg-gradient-to-r from-slate-900 to-emerald-600 bg-clip-text text-3xl font-bold text-transparent dark:from-white dark:to-emerald-400 md:text-6xl">
           ИИ-анализ электрокардиограмм
         </h2>
         <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
@@ -220,34 +220,38 @@ export function EcgTab() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4">
           <div
-            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-md transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '100ms' }}
           >
-            <div className="mb-4 flex items-center justify-center">
-              <IconEcg size={32} className="h-8 w-8 text-slate-600 dark:text-emerald-400" />
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+              <IconEcg size={24} className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
             </div>
             <p className="mb-1 text-base font-medium text-slate-700 dark:text-emerald-50">
               Анализ за 5–10 секунд
             </p>
           </div>
           <div
-            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-md transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '200ms' }}
           >
-            <IconExplain size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
-            <p className="text-sm text-slate-700 dark:text-emerald-50">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+              <IconExplain size={24} className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <p className="mb-1 text-base font-medium text-slate-700 dark:text-emerald-50">
               Объяснение каждого вывода
             </p>
           </div>
           <div
-            className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
-                       hover:-translate-y-1 hover:shadow-md transition-all duration-300 animate-fadeIn"
+            className="bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-[#1F2E24] rounded-2xl p-6 shadow-sm
+                       hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all duration-300 animate-fadeIn"
             style={{ animationDelay: '300ms' }}
           >
-            <IconHistory size={40} className="mx-auto mb-4 text-slate-600 dark:text-emerald-400" />
-            <p className="text-sm text-slate-700 dark:text-emerald-50">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+              <IconHistory size={24} className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <p className="mb-1 text-base font-medium text-slate-700 dark:text-emerald-50">
               История исследований
             </p>
           </div>
@@ -257,8 +261,8 @@ export function EcgTab() {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           className={
-            'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold text-white rounded-lg ' +
-            'px-8 py-4 text-lg inline-flex items-center gap-2 mx-auto mt-4 ' +
+            'bg-gradient-to-r from-emerald-500 to-teal-500 font-semibold text-white rounded-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] ' +
+            'px-8 py-4 text-lg inline-flex items-center justify-center gap-2 mx-auto mt-4 w-full md:w-auto ' +
             'hover:bg-emerald-700 dark:hover:bg-emerald-400 ' +
             'hover:scale-105 ' +
             'transition-all duration-300 active:scale-95 animate-fadeIn'

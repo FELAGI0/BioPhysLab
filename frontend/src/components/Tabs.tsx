@@ -32,7 +32,7 @@ interface TabsProps {
 export function Tabs({ tabs, active, onChange }: TabsProps) {
   return (
     <nav
-      className="flex gap-6 border-b border-slate-200 dark:border-[#1F2E24]"
+      className="hide-scrollbar flex flex-nowrap gap-4 overflow-x-auto border-b border-slate-200 dark:border-[#1F2E24] md:gap-6"
       aria-label="Вкладки"
     >
       {TAB_DEFS.filter((t) => tabs.includes(t.label)).map((tab) => {
@@ -44,13 +44,13 @@ export function Tabs({ tabs, active, onChange }: TabsProps) {
             type="button"
             onClick={() => onChange(tab.label)}
             className={
-              'flex items-center gap-1.5 pb-2 text-sm font-medium transition-colors duration-200 active:scale-95 ' +
+              'flex shrink-0 items-center gap-1 pb-2 text-xs font-medium transition-colors duration-200 active:scale-95 md:gap-1.5 md:text-sm ' +
               (isActive
                 ? 'border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-300 [&>svg]:text-emerald-500 dark:[&>svg]:text-emerald-300'
                 : 'border-b-2 border-transparent text-slate-500 dark:text-slate-300/75 hover:text-emerald-600 dark:hover:text-emerald-300 [&>svg]:text-slate-500 dark:[&>svg]:text-slate-300/75 dark:hover:[&>svg]:text-emerald-300')
             }
           >
-            <Icon size={16} />
+            <Icon size={14} />
             {tab.label}
           </button>
         )

@@ -20,6 +20,14 @@
   }
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Премиальная графитовая палитра ночной темы. */
 .dark {
   color-scheme: dark;

@@ -19,6 +19,7 @@ function base(props: IconProps) {
     strokeWidth: 2,
     strokeLinecap: 'round' as const,
     strokeLinejoin: 'round' as const,
+    className: props.className,
     'aria-hidden': true,
   }
 }

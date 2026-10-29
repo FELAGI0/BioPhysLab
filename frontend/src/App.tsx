@@ -67,10 +67,8 @@ function HeaderControls() {
         <button
           type="button"
           onClick={() => setAuthOpen(true)}
-          className="border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300
-                     bg-emerald-50 dark:bg-emerald-900/30 rounded-lg px-3.5 py-1.5 text-sm
-                     hover:bg-emerald-100 dark:hover:bg-emerald-900/50
-                     transition-all duration-200 active:scale-95"
+          className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-lg px-3.5 py-1.5 text-sm
+                     hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all duration-200 active:scale-95"
         >
           Войти
         </button>

@@ -12,6 +12,9 @@ export function Background() {
     >
       {/* Слой 1: очень слабая сетка (3–5%) */}
       <div
+        className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl"
+      />
+      <div
         className="absolute inset-0 opacity-[0.035] dark:opacity-[0.06]"
         style={{
           backgroundImage:

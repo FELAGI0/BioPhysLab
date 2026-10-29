@@ -65,7 +65,7 @@ export function NernstTab() {
               className={
                 'text-sm rounded-full px-3 py-1 transition-colors duration-200 ' +
                 (idx === ionIndex
-                  ? 'bg-emerald-600 dark:bg-emerald-500 dark:text-black text-white'
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]'
                   : 'bg-slate-100 dark:bg-emerald-900/30 text-slate-700 dark:text-emerald-200/70 hover:bg-slate-200 dark:hover:bg-emerald-900/50')
               }
             >

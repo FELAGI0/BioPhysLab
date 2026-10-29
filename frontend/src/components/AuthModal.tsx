@@ -49,7 +49,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
             className={
               'px-3 py-1.5 text-sm rounded-lg transition-colors ' +
               (isLogin
-                ? 'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium'
                 : 'bg-slate-100 dark:bg-emerald-900/30 text-slate-600 dark:text-emerald-200/70 hover:bg-slate-200 dark:hover:bg-emerald-900/40')
             }
           >
@@ -61,7 +61,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
             className={
               'px-3 py-1.5 text-sm rounded-lg transition-colors ' +
               (!isLogin
-                ? 'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium'
                 : 'bg-slate-100 dark:bg-emerald-900/30 text-slate-600 dark:text-emerald-200/70 hover:bg-slate-200 dark:hover:bg-emerald-900/40')
             }
           >
@@ -112,7 +112,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
         <button
           type="submit"
           disabled={busy}
-          className="bg-emerald-600 dark:bg-emerald-500 dark:text-black font-semibold rounded-lg px-6 py-3 text-base hover:bg-emerald-700 dark:hover:bg-emerald-400
+          className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-lg px-6 py-3 text-base hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]
                      disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95 w-full"
         >
           {busy ? 'Подождите...' : isLogin ? 'Войти' : 'Зарегистрироваться'}
