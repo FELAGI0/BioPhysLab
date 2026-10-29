@@ -14,7 +14,7 @@ import { HistoryCardSkeleton } from './Skeleton'
 import { Spinner } from './Spinner'
 
 const BUTTON =
-  'bg-emerald-600 text-white rounded-lg px-4 py-2 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
+  'bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium text-white rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 active:scale-95'
 
 const SMALL_BUTTON =
   'border border-slate-300 dark:border-emerald-900/50 text-slate-600 dark:text-emerald-200/70 rounded-lg px-2 py-1 text-xs hover:bg-slate-50 dark:hover:bg-emerald-900/40 hover:text-slate-800 dark:hover:text-emerald-100 transition-all duration-200 active:scale-95'

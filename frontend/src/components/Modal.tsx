@@ -64,7 +64,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="bg-emerald-600 text-white rounded-lg px-4 py-2 hover:bg-emerald-700
+            className="bg-emerald-600 dark:bg-emerald-500 dark:text-black font-medium text-white rounded-lg px-4 py-2 hover:bg-emerald-700 dark:hover:bg-emerald-400
                        transition-all duration-200 active:scale-95"
           >
             Закрыть

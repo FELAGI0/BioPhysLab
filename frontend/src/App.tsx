@@ -6,6 +6,7 @@ import { EcgTab } from './components/EcgTab'
 import { ExplainTab } from './components/ExplainTab'
 import { FaqModal } from './components/FaqModal'
 import { HistoryTab } from './components/HistoryTab'
+import { IconEcg, IconMoon, IconSun } from './components/icons'
 import { LicenseModal } from './components/LicenseModal'
 import { SharedPage } from './components/SharedPage'
 import { SolverTab } from './components/SolverTab'
@@ -19,19 +20,7 @@ type Tab = (typeof TABS)[number]
 
 /** Иконка солнца/луны для переключателя темы. */
 function ThemeToggleIcon({ dark }: { dark: boolean }) {
-  return dark ? (
-    // Луна
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
-    </svg>
-  ) : (
-    // Солнце
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
-    </svg>
-  )
+  return dark ? <IconMoon size={16} /> : <IconSun size={16} />
 }
 
 /** Блок в шапке справа: тема + авторизация. */
@@ -103,7 +92,8 @@ function AppInner() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#0a0f0d] flex flex-col transition-colors duration-200">
       <div className="max-w-4xl mx-auto p-6 w-full flex-1">
         <header className="mb-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <IconEcg size={26} className="text-emerald-600 dark:text-emerald-400" />
             <h1 className="text-2xl font-bold text-slate-900 dark:text-emerald-50">
               BioPhysLab
             </h1>
@@ -116,7 +106,7 @@ function AppInner() {
           </p>
         </header>
 
-        <div className="mb-6">
+        <div className="mb-8">
           <Tabs
             tabs={[...TABS]}
             active={activeTab}
