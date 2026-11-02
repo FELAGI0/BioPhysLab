@@ -56,7 +56,7 @@ export function EcgTab() {
       })
   }, [])
 
-  const { data, error, loading, run } = useAsync(() =>
+  const { data, error, loading, run, reset } = useAsync(() =>
     file ? analyzeEcg(file) : Promise.reject(new Error('Файл не выбран')),
   )
 
@@ -73,6 +73,8 @@ export function EcgTab() {
       return
     }
     if (previewUrl) URL.revokeObjectURL(previewUrl)
+    // Новый файл — прежний результат больше не относится к нему.
+    reset()
     setFile(selected)
     setPreviewUrl(URL.createObjectURL(selected))
   }

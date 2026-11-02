@@ -55,9 +55,13 @@ const nernst: CalcDef = {
     { key: 'C_in', label: 'C_вн — концентрация внутри', unit: 'ммоль/л', default: 140 },
   ],
   compute: (v) => {
-    const safeIn = Math.max(Math.abs(v.C_in), 1e-12)
-    const safeOut = Math.max(Math.abs(v.C_out), 1e-12)
-    const e = ((R * v.T) / (v.z * F)) * Math.log(safeOut / safeIn) // вольты
+    if (v.z === 0) {
+      return { value: NaN, unit: 'мВ', note: 'Заряд z не может быть нулём' }
+    }
+    if (v.C_in === 0 || v.C_out === 0) {
+      return { value: NaN, unit: 'мВ', note: 'Концентрации должны быть больше нуля' }
+    }
+    const e = ((R * v.T) / (v.z * F)) * Math.log(v.C_out / v.C_in) // вольты
     return { value: e * 1000, unit: 'мВ' }
   },
 }
@@ -83,9 +87,19 @@ const ghk: CalcDef = {
     { key: 'Cl_out', label: '[Cl]_нар', unit: 'ммоль/л', default: 110 },
   ],
   compute: (v) => {
+    if (v.T <= 0) {
+      return { value: NaN, unit: 'мВ', note: 'Температура должна быть больше нуля' }
+    }
     const num = v.P_K * v.K_out + v.P_Na * v.Na_out + v.P_Cl * v.Cl_in
     const den = v.P_K * v.K_in + v.P_Na * v.Na_in + v.P_Cl * v.Cl_out
-    const vm = ((R * v.T) / F) * Math.log(num / Math.max(Math.abs(den), 1e-12))
+    if (num <= 0 || den <= 0) {
+      return {
+        value: NaN,
+        unit: 'мВ',
+        note: 'Числитель и знаменатель ГХК должны быть положительными',
+      }
+    }
+    const vm = ((R * v.T) / F) * Math.log(num / den)
     return { value: vm * 1000, unit: 'мВ' }
   },
 }
@@ -102,8 +116,10 @@ const fick: CalcDef = {
     { key: 'S', label: 'S — площадь', unit: 'м²', default: 1e-4 },
   ],
   compute: (v) => {
-    const dx = Math.abs(v.dx) < 1e-12 ? 1e-12 : v.dx
-    return { value: -v.D * (v.dC / dx) * v.S, unit: 'моль/с' }
+    if (v.dx === 0) {
+      return { value: NaN, unit: 'моль/с', note: 'Расстояние Δx не может быть нулём' }
+    }
+    return { value: -v.D * (v.dC / v.dx) * v.S, unit: 'моль/с' }
   },
 }
 
@@ -119,8 +135,14 @@ const poiseuille: CalcDef = {
     { key: 'L', label: 'L — длина', unit: 'м', default: 0.1 },
   ],
   compute: (v) => {
-    const L = Math.abs(v.L) < 1e-12 ? 1e-12 : v.L
-    const q = (Math.PI * v.r ** 4 * v.dP) / (8 * v.eta * L) // м³/с
+    if (v.eta === 0 || v.L === 0) {
+      return {
+        value: NaN,
+        unit: 'м³/с',
+        note: 'Вязкость η и длина L не могут быть нулём',
+      }
+    }
+    const q = (Math.PI * v.r ** 4 * v.dP) / (8 * v.eta * v.L) // м³/с
     return { value: q, unit: 'м³/с', note: `${(q * 1e6).toPrecision(4)} мл/с` }
   },
 }
@@ -150,7 +172,13 @@ const reynolds: CalcDef = {
     { key: 'eta', label: 'η — вязкость', unit: 'Па·с', default: 0.0035 },
   ],
   compute: (v) => {
+    if (v.eta === 0) {
+      return { value: NaN, unit: '', note: 'Вязкость η не может быть нулём' }
+    }
     const re = (v.rho * v.v * v.d) / v.eta
+    if (!Number.isFinite(re)) {
+      return { value: re, unit: '' }
+    }
     const mode =
       re < 2000 ? 'ламинарный режим' : re > 4000 ? 'турбулентный режим' : 'переходный режим'
     return { value: re, unit: '', note: mode }
@@ -183,9 +211,12 @@ const INPUT_CLS =
 /** Форматирует результат: научная запись для очень больших/маленьких чисел. */
 function formatResult(value: number): string {
   const abs = Math.abs(value)
-  if (!Number.isFinite(value)) return '—'
+  if (Number.isNaN(value)) return '—'
+  if (!Number.isFinite(value)) return '∞'
   if (abs !== 0 && (abs >= 1e6 || abs < 1e-3)) {
-    return value.toExponential(4).replace('e', ' · 10^')
+    // 1.2346e+7 → «1.2346 · 10^7», 1.5e-9 → «1.5 · 10^-9»
+    const [mantissa, exponent] = value.toExponential(4).split('e')
+    return `${mantissa} · 10^${Number(exponent)}`
   }
   return value.toPrecision(6).replace(/\.?0+$/, '')
 }

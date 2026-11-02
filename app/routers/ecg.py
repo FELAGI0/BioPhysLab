@@ -23,6 +23,19 @@ MAX_IMAGE_BYTES = 5 * 1024 * 1024  # 5 МБ
 ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/jpg", "image/png"}
 
 
+def _detect_image_type(data: bytes) -> str | None:
+    """Определяет реальный формат по магическим байтам.
+
+    Content-Type приходит от клиента и ему нельзя доверять: чтобы data URL
+    в AI-запросе всегда соответствовал содержимому, MIME берём из байтов.
+    """
+    if data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "image/png"
+    if data.startswith(b"\xff\xd8"):
+        return "image/jpeg"
+    return None
+
+
 @router.post("/ecg", response_model=None)
 async def analyze_ecg(
     file: UploadFile,
@@ -38,8 +51,15 @@ async def analyze_ecg(
 
     # Размер проверяем ДО чтения: сначала по Content-Length, затем по факту.
     declared = request.headers.get("content-length")
-    if declared is not None and int(declared) > MAX_IMAGE_BYTES + 2048:
-        raise HTTPException(status_code=413, detail="Файл слишком большой (максимум 5 МБ)")
+    if declared is not None:
+        try:
+            declared_bytes = int(declared)
+        except ValueError:
+            raise HTTPException(
+                status_code=400, detail="Некорректный заголовок Content-Length"
+            )
+        if declared_bytes > MAX_IMAGE_BYTES + 2048:
+            raise HTTPException(status_code=413, detail="Файл слишком большой (максимум 5 МБ)")
 
     if file.content_type not in ALLOWED_CONTENT_TYPES:
         raise HTTPException(
@@ -53,13 +73,16 @@ async def analyze_ecg(
     if not data:
         raise HTTPException(status_code=400, detail="Пустой файл")
 
-    image_b64 = base64.b64encode(data).decode("ascii")
+    # MIME определяем по магическим байтам, а не по заявленному Content-Type:
+    # фактический формат всегда должен совпадать с data URL в AI-запросе.
+    detected = _detect_image_type(data)
+    if detected is None:
+        raise HTTPException(
+            status_code=400, detail="Файл не является корректным изображением jpg или png"
+        )
 
-    # Нестандартный image/jpg нормализуем к официальному MIME image/jpeg,
-    # чтобы data URL в AI-запросе был корректным.
-    image_mime = (
-        "image/jpeg" if file.content_type == "image/jpg" else file.content_type
-    )
+    image_b64 = base64.b64encode(data).decode("ascii")
+    image_mime = detected
 
     started = time.monotonic()
     result = await ask_ai(

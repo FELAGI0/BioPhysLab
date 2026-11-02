@@ -22,5 +22,12 @@ export function useAsync<T>(fn: () => Promise<T>) {
     }
   }, [fn])
 
-  return { data, error, loading, run }
+  /** Сбрасывает результат и ошибку (например, при выборе нового файла). */
+  const reset = useCallback(() => {
+    setData(null)
+    setError(null)
+    setLoading(false)
+  }, [])
+
+  return { data, error, loading, run, reset }
 }

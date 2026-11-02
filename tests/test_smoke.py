@@ -7,7 +7,7 @@
 import base64
 from collections.abc import AsyncGenerator
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi import Request, Response
@@ -78,8 +78,9 @@ async def test_health(client):
 @pytest.mark.asyncio
 async def test_ecg_mock(client):
     """POST /api/ecg с картинкой при мокнутом ask_ai → 200 и result."""
-    image_bytes = b"fake-jpeg-bytes"
-    fake_ai = _make_fake_ai("Анализ ЭКГ: ритм синусовый, 70 уд/мин.")
+    # Реальный JPEG-заголовок: MIME определяется по магическим байтам.
+    image_bytes = b"\xff\xd8\xff\xe0fake-jpeg-data"
+    fake_ai = AsyncMock(return_value="Анализ ЭКГ: ритм синусовый, 70 уд/мин.")
 
     with patch.object(ecg_mod, "ask_ai", fake_ai):
         files = {
@@ -96,6 +97,35 @@ async def test_ecg_mock(client):
     assert body["result"] == "Анализ ЭКГ: ритм синусовый, 70 уд/мин."
     # id присутствует (None с замоканной БД, число — с реальной)
     assert "id" in body
+    # ask_ai получил корректный MIME, определённый по магическим байтам.
+    assert fake_ai.call_args.kwargs["image_mime"] == "image/jpeg"
+
+
+@pytest.mark.asyncio
+async def test_ecg_forged_content_type(client):
+    """PNG-байты под меткой image/jpeg → MIME берётся из магических байт (png)."""
+    png_bytes = b"\x89PNG\r\n\x1a\n" + b"0" * 16
+    fake_ai = AsyncMock(return_value="Анализ ЭКГ.")
+
+    with patch.object(ecg_mod, "ask_ai", fake_ai):
+        files = {"file": ("ecg.png", png_bytes, "image/png")}
+        resp = await client.post("/api/ecg", files=files)
+
+    assert resp.status_code == 200
+    assert fake_ai.call_args.kwargs["image_mime"] == "image/png"
+
+
+@pytest.mark.asyncio
+async def test_ecg_not_an_image(client):
+    """Байты без PNG/JPEG-заголовка → 400, даже если Content-Type врёт."""
+    fake_ai = _make_fake_ai("Анализ ЭКГ.")
+
+    with patch.object(ecg_mod, "ask_ai", fake_ai):
+        files = {"file": ("fake.png", b"plain-text-bytes", "image/png")}
+        resp = await client.post("/api/ecg", files=files)
+
+    assert resp.status_code == 400
+    assert "не является корректным изображением" in resp.json()["detail"]
 
 
 @pytest.mark.asyncio
@@ -136,7 +166,9 @@ def test_strip_ui_tags():
 @pytest.mark.asyncio
 async def test_empty_ai_response(client):
     """Провайдер вернул пустой текст → ask_ai даёт 502 (для любого провайдера)."""
-    async def fake_provider(prompt: str, image_b64: str | None) -> str | None:
+    async def fake_provider(
+        prompt: str, image_b64: str | None, image_mime: str
+    ) -> str | None:
         return "   "  # пустой/whitespace ответ провайдера
 
     # Мокаем оба провайдера: тест не должен зависеть от AI_PROVIDER в .env.
@@ -171,7 +203,12 @@ async def test_rate_limit(client):
 def _make_fake_ai(answer: str):
     """Фабрика мока ask_ai с заданным ответом."""
 
-    async def fake_ai(prompt: str, image_b64: str | None = None, module: str = "unknown") -> str:
+    async def fake_ai(
+        prompt: str,
+        image_b64: str | None = None,
+        module: str = "unknown",
+        image_mime: str = "image/jpeg",
+    ) -> str:
         return answer
 
     return fake_ai
