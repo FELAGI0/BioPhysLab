@@ -3,13 +3,13 @@
 import { useState } from 'react'
 import { AuthModal } from './components/AuthModal'
 import { Background } from './components/Background'
+import { CalculatorTab } from './components/CalculatorTab'
 import { EcgTab } from './components/EcgTab'
 import { ExplainTab } from './components/ExplainTab'
 import { FaqModal } from './components/FaqModal'
 import { HistoryTab } from './components/HistoryTab'
 import { IconEcg, IconMoon, IconSun } from './components/icons'
 import { LicenseModal } from './components/LicenseModal'
-import { NernstTab } from './components/NernstTab'
 import { SharedPage } from './components/SharedPage'
 import { SolverTab } from './components/SolverTab'
 import { StatsTab } from './components/StatsTab'
@@ -125,7 +125,7 @@ function AppInner() {
           {activeTab === 'ЭКГ' && <EcgTab />}
           {activeTab === 'Задачи' && <SolverTab />}
           {activeTab === 'Объяснения' && <ExplainTab />}
-          {activeTab === 'Калькулятор' && <NernstTab />}
+          {activeTab === 'Калькулятор' && <CalculatorTab />}
           {activeTab === 'Статистика' && <StatsTab />}
           {activeTab === 'История' && <HistoryTab />}
         </main>

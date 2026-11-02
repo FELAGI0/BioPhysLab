@@ -6,15 +6,22 @@ import remarkMath from 'remark-math'
 
 interface MarkdownViewProps {
   content: string
+  /** Переопределяет контейнер (по умолчанию — типографика prose). */
+  className?: string
 }
 
-export function MarkdownView({ content }: MarkdownViewProps) {
+export function MarkdownView({ content, className }: MarkdownViewProps) {
   const normalizedContent = content
     .replace(/\\\[([\s\S]*?)\\\]/g, '$$$1$$')
     .replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$')
 
   return (
-    <div className="prose prose-sm max-w-none dark:prose-invert text-slate-800 dark:text-slate-100">
+    <div
+      className={
+        className ??
+        'prose prose-sm max-w-none dark:prose-invert text-slate-800 dark:text-slate-100'
+      }
+    >
       <ReactMarkdown
         remarkPlugins={[remarkMath]}
         rehypePlugins={[rehypeKatex]}
