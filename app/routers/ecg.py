@@ -55,8 +55,16 @@ async def analyze_ecg(
 
     image_b64 = base64.b64encode(data).decode("ascii")
 
+    # Нестандартный image/jpg нормализуем к официальному MIME image/jpeg,
+    # чтобы data URL в AI-запросе был корректным.
+    image_mime = (
+        "image/jpeg" if file.content_type == "image/jpg" else file.content_type
+    )
+
     started = time.monotonic()
-    result = await ask_ai(ECG_PROMPT, image_b64=image_b64, module="ecg")
+    result = await ask_ai(
+        ECG_PROMPT, image_b64=image_b64, module="ecg", image_mime=image_mime
+    )
     duration_ms = round((time.monotonic() - started) * 1000)
 
     # Safety guard: off-topic изображение не сохраняется в историю.

@@ -26,8 +26,16 @@ def _strip_ui_tags(text: str) -> str:
     return _UI_TAG_RE.sub("", text)
 
 
-async def ask_ai(prompt: str, image_b64: str | None = None, module: str = "unknown") -> str:
+async def ask_ai(
+    prompt: str,
+    image_b64: str | None = None,
+    module: str = "unknown",
+    image_mime: str = "image/jpeg",
+) -> str:
     """Отправляет промпт (и опционально изображение в base64) в AI-провайдер.
+
+    image_b64 — «сырые» base64-данные без data-префикса; ask_ai сам собирает
+    data URL (openai) или inline_data (gemini) с корректным image_mime.
 
     Возвращает текст ответа. При пустом ответе или ошибке сети — HTTPException(502).
     Логирует в stdout: module, latency_ms, status.
@@ -37,9 +45,9 @@ async def ask_ai(prompt: str, image_b64: str | None = None, module: str = "unkno
 
     try:
         if settings.AI_PROVIDER == "gemini":
-            text = await _ask_gemini(prompt, image_b64)
+            text = await _ask_gemini(prompt, image_b64, image_mime)
         else:
-            text = await _ask_openai(prompt, image_b64)
+            text = await _ask_openai(prompt, image_b64, image_mime)
 
         if text is None or not text.strip():
             status = "empty_response"
@@ -76,14 +84,16 @@ async def ask_ai(prompt: str, image_b64: str | None = None, module: str = "unkno
         )
 
 
-async def _ask_gemini(prompt: str, image_b64: str | None) -> str | None:
+async def _ask_gemini(
+    prompt: str, image_b64: str | None, image_mime: str
+) -> str | None:
     """Запрос к Gemini generateContent (текст + опционально inline_data изображение)."""
     parts: list[dict] = [{"text": prompt}]
     if image_b64 is not None:
         parts.append(
             {
                 "inline_data": {
-                    "mime_type": "image/jpeg",
+                    "mime_type": image_mime,
                     "data": image_b64,
                 }
             }
@@ -120,15 +130,19 @@ async def _ask_gemini(prompt: str, image_b64: str | None) -> str | None:
     return parts_resp[0].get("text")
 
 
-async def _ask_openai(prompt: str, image_b64: str | None) -> str | None:
+async def _ask_openai(
+    prompt: str, image_b64: str | None, image_mime: str
+) -> str | None:
     """Запрос к OpenAI chat/completions (текст + опционально image_url с data-URI)."""
     content: list[dict]
     if image_b64 is not None:
+        # Провайдер ожидает полный data URL с корректным MIME-типом;
+        # без префикса (или с неверным типом) модель не видит изображение.
         content = [
             {"type": "text", "text": prompt},
             {
                 "type": "image_url",
-                "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"},
+                "image_url": {"url": f"data:{image_mime};base64,{image_b64}"},
             },
         ]
     else:
