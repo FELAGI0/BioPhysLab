@@ -149,17 +149,6 @@ function AppInner() {
             >
               Лицензия
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                // Заготовка ЮKassa: реальная интеграция подключается позже.
-                console.log('[payments] YooKassa integration pending')
-                alert('Платежи пока в разработке — скоро появится кнопка поддержки. Спасибо за интерес!')
-              }}
-              className="text-slate-500 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline transition-colors duration-200"
-            >
-              Поддержать проект
-            </button>
           </nav>
         </div>
       </footer>

@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
-from app.routers import auth, ecg, explain, history, payments, solver
+from app.routers import auth, ecg, explain, history, solver
 from app.services.stats import get_stats
 
 app = FastAPI(title="BioPhysLab", version="0.1.0")
@@ -24,7 +24,6 @@ app.include_router(ecg.router, prefix="/api")
 app.include_router(solver.router, prefix="/api")
 app.include_router(explain.router, prefix="/api")
 app.include_router(history.router, prefix="/api")
-app.include_router(payments.router, prefix="/api")
 
 
 @app.get("/health")

@@ -32,12 +32,6 @@ class Settings(BaseSettings):
     # --- Rate limit: запросов в час на одну cookie-сессию ---
     RATE_LIMIT_PER_HOUR: int = 30
 
-    # --- ЮKassa (заготовка, без реальных платежей) ---
-    # Пустые значения = платежи не активированы; роутер payments работает как заглушка.
-    # Для реальных платежей заполнить в .env на сервере.
-    YOOKASSA_SHOP_ID: str = ""
-    YOOKASSA_SECRET_KEY: str = ""
-
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 
