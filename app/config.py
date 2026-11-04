@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # --- AI-провайдер (ключ хранится только на сервере) ---
     AI_API_KEY: str = ""
     AI_PROVIDER: Literal["openai", "gemini"] = "openai"
-    AI_MODEL: str = "claude-opus-5-5"
+    AI_MODEL: str = "claude-opus-5"
     # Base URL для OpenAI-совместимых запросов (можно указать свой прокси).
     AI_BASE_URL: str = "https://neural-api.ru/v1"
 
@@ -31,6 +31,12 @@ class Settings(BaseSettings):
 
     # --- Rate limit: запросов в час на одну cookie-сессию ---
     RATE_LIMIT_PER_HOUR: int = 30
+
+    # --- ЮKassa (заготовка, без реальных платежей) ---
+    # Пустые значения = платежи не активированы; роутер payments работает как заглушка.
+    # Для реальных платежей заполнить в .env на сервере.
+    YOOKASSA_SHOP_ID: str = ""
+    YOOKASSA_SECRET_KEY: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

@@ -114,7 +114,9 @@ async def _ask_gemini(
                         "role": "user",
                         "parts": parts,
                     }
-                ]
+                ],
+                # 5000: с запасом на длинные пошаговые решения и разборы ЭКГ.
+                "generationConfig": {"maxOutputTokens": 5000},
             },
         )
         response.raise_for_status()
@@ -159,6 +161,8 @@ async def _ask_openai(
             json={
                 "model": settings.AI_MODEL,
                 "messages": [{"role": "user", "content": content}],
+                # 5000: с запасом на длинные пошаговые решения и разборы ЭКГ.
+                "max_tokens": 5000,
             },
         )
         response.raise_for_status()
