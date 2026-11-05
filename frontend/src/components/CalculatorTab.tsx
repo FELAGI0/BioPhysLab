@@ -1,7 +1,7 @@
 /**
- * Калькулятор: 6 биофизических формул из методички, локальный расчёт (без AI).
- * Две категории: «Мембраны» (Нернст, ГХК, Фик) и «Гидродинамика»
- * (Пуазейль, Вязкость, Рейнольдс). Формулы выводятся крупно через KaTeX.
+ * Калькулятор: 8 биофизических формул из методички, локальный расчёт (без AI).
+ * Две категории: «Мембраны» (Нернст, ГХК, Фик, Нернст—Планк) и «Гидродинамика»
+ * (Пуазейль, Вязкость, Рейнольдс, Бернулли). Формулы выводятся крупно через KaTeX.
  */
 
 import { useState } from 'react'
@@ -108,18 +108,34 @@ const ghk: CalcDef = {
 const fick: CalcDef = {
   id: 'fick',
   title: 'Уравнение Фика',
-  formula: 'J = -D \\frac{\\Delta C}{\\Delta x} S',
+  formula: 'J = -D \\frac{dC}{dx} S',
   fields: [
-    { key: 'D', label: 'D — коэффициент диффузии', unit: 'м²/с', default: 1e-9 },
-    { key: 'dC', label: 'ΔC — разность концентраций', unit: 'моль/м³', default: 1 },
-    { key: 'dx', label: 'Δx — расстояние', unit: 'м', default: 1e-6 },
-    { key: 'S', label: 'S — площадь', unit: 'м²', default: 1e-4 },
+    { key: 'D', label: 'Коэф. диффузии (D)', unit: 'м²/с', default: 1e-9 },
+    { key: 'gradC', label: 'Градиент концентрации (dC/dx)', unit: 'моль/м⁴', default: 1e6 },
+    { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
+  ],
+  compute: (v) => ({ value: -v.D * v.gradC * v.S, unit: 'моль/с' }),
+}
+
+// C2) Уравнение Нернста—Планка (упрощённое): J = -D · (dC/dx) + (zFC/RT) · E.
+const nernstPlanck: CalcDef = {
+  id: 'nernst-planck',
+  title: 'Уравнение Нернста—Планка (упрощённое)',
+  formula: 'J = -D \\frac{dC}{dx} + \\frac{zFC}{RT} E',
+  fields: [
+    { key: 'D', label: 'Коэф. диффузии (D)', unit: 'м²/с', default: 1e-9 },
+    { key: 'gradC', label: 'Градиент концентрации (dC/dx)', unit: 'моль/м⁴', default: 1e6 },
+    { key: 'z', label: 'Заряд иона (z)', default: 1 },
+    { key: 'C', label: 'Концентрация (C)', unit: 'моль/м³', default: 1 },
+    { key: 'T', label: 'Температура (T)', unit: 'К', default: 310.15 },
+    { key: 'E', label: 'Напряжённость поля (E)', unit: 'В/м', default: 1e4 },
   ],
   compute: (v) => {
-    if (v.dx === 0) {
-      return { value: NaN, unit: 'моль/с', note: 'Расстояние Δx не может быть нулём' }
+    if (v.T <= 0) {
+      return { value: NaN, unit: 'моль/(м²·с)', note: 'Температура должна быть больше нуля' }
     }
-    return { value: -v.D * (v.dC / v.dx) * v.S, unit: 'моль/с' }
+    const j = -v.D * v.gradC + ((v.z * F * v.C) / (R * v.T)) * v.E
+    return { value: j, unit: 'моль/(м²·с)' }
   },
 }
 
@@ -151,13 +167,35 @@ const poiseuille: CalcDef = {
 const viscosity: CalcDef = {
   id: 'viscosity',
   title: 'Вязкость жидкости (уравнение Ньютона)',
-  formula: 'F = \\eta \\frac{\\Delta v}{\\Delta x} S',
+  formula: 'F = \\eta \\frac{dv}{dx} S',
   fields: [
-    { key: 'eta', label: 'η — вязкость', unit: 'Па·с', default: 0.0035 },
-    { key: 'grad', label: 'Δv/Δx — градиент скорости', unit: '1/с', default: 100 },
-    { key: 'S', label: 'S — площадь', unit: 'м²', default: 1e-4 },
+    { key: 'eta', label: 'Вязкость (η)', unit: 'Па·с', default: 0.0035 },
+    { key: 'grad', label: 'Градиент скорости (dv/dx)', unit: '1/с', default: 100 },
+    { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
   ],
   compute: (v) => ({ value: v.eta * v.grad * v.S, unit: 'Н' }),
+}
+
+// E2) Уравнение Бернулли: P + ½ρv² + ρgh = const (полное давление).
+const bernoulli: CalcDef = {
+  id: 'bernoulli',
+  title: 'Уравнение Бернулли (полное давление)',
+  formula: 'P + \\frac{1}{2}\\rho v^2 + \\rho g h = \\text{const}',
+  fields: [
+    { key: 'P', label: 'Статическое давление (P)', unit: 'Па', default: 101325 },
+    { key: 'rho', label: 'Плотность (ρ)', unit: 'кг/м³', default: 1060 },
+    { key: 'v', label: 'Скорость (v)', unit: 'м/с', default: 0.5 },
+    { key: 'g', label: 'Ускорение свободного падения (g)', unit: 'м/с²', default: 9.81 },
+    { key: 'h', label: 'Высота (h)', unit: 'м', default: 1 },
+  ],
+  compute: (v) => {
+    const total = v.P + 0.5 * v.rho * v.v ** 2 + v.rho * v.g * v.h
+    return {
+      value: total,
+      unit: 'Па',
+      note: `Динамическое давление ½ρv² = ${formatResult(0.5 * v.rho * v.v ** 2)} Па`,
+    }
+  },
 }
 
 // F) Число Рейнольдса: Re = ρ v d / η, безразмерное.
@@ -191,12 +229,12 @@ const CATEGORIES: CategoryDef[] = [
   {
     id: 'membranes',
     label: 'Мембраны',
-    calcs: [nernst, ghk, fick],
+    calcs: [nernst, ghk, fick, nernstPlanck],
   },
   {
     id: 'hydro',
     label: 'Гидродинамика',
-    calcs: [poiseuille, viscosity, reynolds],
+    calcs: [poiseuille, viscosity, reynolds, bernoulli],
   },
 ]
 
