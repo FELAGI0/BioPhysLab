@@ -1,7 +1,10 @@
 /**
- * Калькулятор: 8 биофизических формул из методички, локальный расчёт (без AI).
- * Две категории: «Мембраны» (Нернст, ГХК, Фик, Нернст—Планк) и «Гидродинамика»
- * (Пуазейль, Вязкость, Рейнольдс, Бернулли). Формулы выводятся крупно через KaTeX.
+ * Калькулятор: 20 биофизических формул из методички, локальный расчёт (без AI).
+ * Категории: «Мембраны» (Нернст, ГХК, Фик, Нернст—Планк), «Гидродинамика»
+ * (Пуазейль, Вязкость, Рейнольдс, Бернулли), «Акустика» (интенсивность,
+ * звуковое давление, уровень дБ, скорости звука, Вебер—Фехнер, Доплер),
+ * «Электрический ток» (плотность тока, закон Ома, электрофорез,
+ * гальванизация, переменный ток). Формулы выводятся крупно через KaTeX.
  */
 
 import { useState } from 'react'
@@ -223,6 +226,255 @@ const reynolds: CalcDef = {
   },
 }
 
+/* ---------- Акустика (по методичке) ---------- */
+
+// G) Интенсивность волны: I = P / S.
+const intensity: CalcDef = {
+  id: 'intensity',
+  title: 'Интенсивность волны',
+  formula: 'I = \\frac{P}{S}',
+  fields: [
+    { key: 'P', label: 'Мощность (P)', unit: 'Вт', default: 1e-3 },
+    { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
+  ],
+  compute: (v) => {
+    if (v.S === 0) {
+      return { value: NaN, unit: 'Вт/м²', note: 'Площадь S не может быть нулём' }
+    }
+    return { value: v.P / v.S, unit: 'Вт/м²' }
+  },
+}
+
+// H) Звуковое давление: p = F / S.
+const soundPressure: CalcDef = {
+  id: 'sound-pressure',
+  title: 'Звуковое давление',
+  formula: 'p = \\frac{F}{S}',
+  fields: [
+    { key: 'F', label: 'Сила (F)', unit: 'Н', default: 1e-4 },
+    { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
+  ],
+  compute: (v) => {
+    if (v.S === 0) {
+      return { value: NaN, unit: 'Па', note: 'Площадь S не может быть нулём' }
+    }
+    return { value: v.F / v.S, unit: 'Па' }
+  },
+}
+
+// I) Уровень интенсивности звука: L = 10 lg(I/I_0), I_0 = 10⁻¹² Вт/м².
+const intensityLevel: CalcDef = {
+  id: 'intensity-level',
+  title: 'Уровень интенсивности (дБ)',
+  formula: 'L = 10 \\, \\lg \\frac{I}{I_0}, \\quad I_0 = 10^{-12} \\, \\text{Вт/м}^2',
+  fields: [
+    { key: 'I', label: 'Интенсивность (I)', unit: 'Вт/м²', default: 1e-12 },
+  ],
+  compute: (v) => {
+    if (v.I <= 0) {
+      return { value: NaN, unit: 'дБ', note: 'Интенсивность I должна быть больше нуля' }
+    }
+    const I0 = 1e-12
+    const l = 10 * Math.log10(v.I / I0)
+    return { value: l, unit: 'дБ' }
+  },
+}
+
+// J) Скорость звука в газах: v = sqrt(γ R T / M).
+const soundGas: CalcDef = {
+  id: 'sound-gas',
+  title: 'Скорость звука в газах',
+  formula: 'v = \\sqrt{\\frac{\\gamma R T}{M}}',
+  fields: [
+    { key: 'gamma', label: 'Показатель адиабаты (γ)', default: 1.4 },
+    { key: 'T', label: 'Температура (T)', unit: 'К', default: 310.15 },
+    { key: 'M', label: 'Молярная масса (M)', unit: 'кг/моль', default: 0.029 },
+  ],
+  compute: (v) => {
+    if (v.M <= 0 || v.T <= 0) {
+      return {
+        value: NaN,
+        unit: 'м/с',
+        note: 'Молярная масса и температура должны быть больше нуля',
+      }
+    }
+    return { value: Math.sqrt((v.gamma * R * v.T) / v.M), unit: 'м/с' }
+  },
+}
+
+// K) Скорость звука в жидкостях: v = sqrt(K / ρ).
+const soundLiquid: CalcDef = {
+  id: 'sound-liquid',
+  title: 'Скорость звука в жидкостях',
+  formula: 'v = \\sqrt{\\frac{K}{\\rho}}',
+  fields: [
+    { key: 'K', label: 'Модуль объёмной упругости (K)', unit: 'Па', default: 2.2e9 },
+    { key: 'rho', label: 'Плотность (ρ)', unit: 'кг/м³', default: 1000 },
+  ],
+  compute: (v) => {
+    if (v.K <= 0 || v.rho <= 0) {
+      return {
+        value: NaN,
+        unit: 'м/с',
+        note: 'Модуль упругости и плотность должны быть больше нуля',
+      }
+    }
+    return { value: Math.sqrt(v.K / v.rho), unit: 'м/с' }
+  },
+}
+
+// L) Закон Вебера—Фехнера: E = k · lg(I / I_0).
+const weberFechner: CalcDef = {
+  id: 'weber-fechner',
+  title: 'Закон Вебера—Фехнера',
+  formula: 'E = k \\, \\lg \\frac{I}{I_0}',
+  fields: [
+    { key: 'k', label: 'Коэффициент (k)', default: 0.1 },
+    { key: 'I', label: 'Интенсивность (I)', unit: 'Вт/м²', default: 1e-6 },
+  ],
+  compute: (v) => {
+    const I0 = 1e-12
+    if (v.I <= 0) {
+      return { value: NaN, unit: '', note: 'Интенсивность I должна быть больше нуля' }
+    }
+    return { value: v.k * Math.log10(v.I / I0), unit: '', note: 'I₀ = 10⁻¹² Вт/м² (условная единица ощущения)' }
+  },
+}
+
+// M) Доплеровский сдвиг: f' = f (v ± v_набл) / (v ∓ v_ист).
+const doppler: CalcDef = {
+  id: 'doppler',
+  title: 'Доплеровский сдвиг частоты',
+  formula: "f' = f \\, \\frac{v \\pm v_{\\text{набл}}}{v \\mp v_{\\text{ист}}}",
+  fields: [
+    { key: 'f', label: 'Частота источника (f)', unit: 'Гц', default: 1000 },
+    { key: 'v', label: 'Скорость звука (v)', unit: 'м/с', default: 340 },
+    { key: 'vObs', label: 'Скорость наблюдателя (v_набл)', unit: 'м/с', default: 0 },
+    { key: 'vSrc', label: 'Скорость источника (v_ист)', unit: 'м/с', default: 0 },
+  ],
+  compute: (v) => {
+    // Соглашение о знаках: положительная скорость — сближение
+    // (наблюдатель движется к источнику, источник — к наблюдателю).
+    const den = v.v - v.vSrc
+    if (den === 0) {
+      return { value: NaN, unit: 'Гц', note: 'Скорость источника не равна скорости звука' }
+    }
+    if (den < 0) {
+      return { value: NaN, unit: 'Гц', note: 'Источник не может двигаться быстрее звука' }
+    }
+    const fPrime = (v.f * (v.v + v.vObs)) / den
+    return {
+      value: fPrime,
+      unit: 'Гц',
+      note: 'Положительные скорости — сближение (частота растёт)',
+    }
+  },
+}
+
+/* ---------- Электрический ток (по методичке) ---------- */
+
+// N) Плотность тока: j = I / S.
+const currentDensity: CalcDef = {
+  id: 'current-density',
+  title: 'Плотность тока',
+  formula: 'j = \\frac{I}{S}',
+  fields: [
+    { key: 'I', label: 'Сила тока (I)', unit: 'А', default: 1e-3 },
+    { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
+  ],
+  compute: (v) => {
+    if (v.S === 0) {
+      return { value: NaN, unit: 'А/м²', note: 'Площадь S не может быть нулём' }
+    }
+    return { value: v.I / v.S, unit: 'А/м²' }
+  },
+}
+
+// O) Закон Ома: I = U / R и j = σ E.
+const ohm: CalcDef = {
+  id: 'ohm',
+  title: 'Закон Ома для растворов',
+  formula: 'I = \\frac{U}{R}, \\quad j = \\sigma E',
+  fields: [
+    { key: 'U', label: 'Напряжение (U)', unit: 'В', default: 10 },
+    { key: 'R', label: 'Сопротивление (R)', unit: 'Ом', default: 1000 },
+    { key: 'sigma', label: 'Удельная проводимость (σ)', unit: 'См/м', default: 1 },
+    { key: 'E', label: 'Напряжённость (E)', unit: 'В/м', default: 10 },
+  ],
+  compute: (v) => {
+    if (v.R === 0) {
+      return { value: NaN, unit: 'А', note: 'Сопротивление R не может быть нулём' }
+    }
+    const i = v.U / v.R
+    const j = v.sigma * v.E
+    return {
+      value: i,
+      unit: 'А',
+      note: `Плотность тока j = σE = ${formatResult(j)} А/м²`,
+    }
+  },
+}
+
+// P) Максимальная плотность тока при электрофорезе: j_max = 0,1 мА/см² (справочное значение).
+const electrophoresisMax: CalcDef = {
+  id: 'electrophoresis-max',
+  title: 'Максимальная плотность тока при электрофорезе',
+  formula: 'j_{\\max} = \\frac{I_{\\max}}{S}',
+  fields: [
+    { key: 'Imax', label: 'Макс. сила тока (I_max)', unit: 'мА', default: 50 },
+    { key: 'S', label: 'Площадь электрода (S)', unit: 'см²', default: 100 },
+  ],
+  compute: (v) => {
+    if (v.S === 0) {
+      return { value: NaN, unit: 'мА/см²', note: 'Площадь S не может быть нулём' }
+    }
+    const jMax = v.Imax / v.S
+    const limit = 0.1
+    return {
+      value: jMax,
+      unit: 'мА/см²',
+      note:
+        jMax > limit
+          ? `Превышена допустимая плотность тока: j_max > ${limit} мА/см² (порог болевого ощущения)`
+          : `Допустимая плотность тока ≤ ${limit} мА/см² — норма`,
+    }
+  },
+}
+
+// Q) Максимальное напряжение при гальванизации: U_max = j_max · ρ · L.
+const galvanizationMax: CalcDef = {
+  id: 'galvanization-max',
+  title: 'Максимальное напряжение при гальванизации',
+  formula: 'U_{\\max} = j_{\\max} \\, \\rho \\, L',
+  fields: [
+    { key: 'jmax', label: 'Макс. плотность тока (j_max)', unit: 'А/м²', default: 1 },
+    { key: 'rho', label: 'Удельное сопротивление тканей (ρ)', unit: 'Ом·м', default: 2 },
+    { key: 'L', label: 'Расстояние между электродами (L)', unit: 'м', default: 0.05 },
+  ],
+  compute: (v) => ({
+    value: v.jmax * v.rho * v.L,
+    unit: 'В',
+    note: 'Оценка по закону Ома: U = j · ρ · L (ткани — однородный проводник)',
+  }),
+}
+
+// R) Мгновенное значение силы тока: i = I_max · sin(ωt).
+const instantaneousCurrent: CalcDef = {
+  id: 'instantaneous-current',
+  title: 'Мгновенное значение силы тока',
+  formula: 'i = I_{\\max} \\sin(\\omega t)',
+  fields: [
+    { key: 'Imax', label: 'Амплитуда (I_max)', unit: 'А', default: 1 },
+    { key: 'omega', label: 'Угловая частота (ω)', unit: 'рад/с', default: 314.16 },
+    { key: 't', label: 'Время (t)', unit: 'с', default: 0.005 },
+  ],
+  compute: (v) => ({
+    value: v.Imax * Math.sin(v.omega * v.t),
+    unit: 'А',
+    note: 'ω = 2πf; при 50 Гц ω ≈ 314,16 рад/с',
+  }),
+}
+
 /* ---------- Категории ---------- */
 
 const CATEGORIES: CategoryDef[] = [
@@ -235,6 +487,16 @@ const CATEGORIES: CategoryDef[] = [
     id: 'hydro',
     label: 'Гидродинамика',
     calcs: [poiseuille, viscosity, reynolds, bernoulli],
+  },
+  {
+    id: 'acoustics',
+    label: 'Акустика',
+    calcs: [intensity, soundPressure, intensityLevel, soundGas, soundLiquid, weberFechner, doppler],
+  },
+  {
+    id: 'current',
+    label: 'Электрический ток',
+    calcs: [currentDensity, ohm, electrophoresisMax, galvanizationMax, instantaneousCurrent],
   },
 ]
 
