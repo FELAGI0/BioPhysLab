@@ -146,6 +146,9 @@ export function EcgTab() {
               Загрузите изображение ЭКГ
             </p>
             <p className="text-xs text-slate-400 dark:text-emerald-200/50">
+              Анализ только базовых параметров: ритм, ЧСС, амплитуда и продолжительность зубцов
+            </p>
+            <p className="text-xs text-slate-400 dark:text-emerald-200/50">
               PNG / JPG до 5 МБ — или перетащите файл сюда
             </p>
             <input
@@ -216,8 +219,11 @@ export function EcgTab() {
           ИИ-анализ электрокардиограмм
         </h2>
         <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-          BioPhysLab разбирает снимки ЭКГ и объясняет каждый вывод —
-          как врач-биофизик, только быстрее.
+          BioPhysLab измеряет базовые параметры ЭКГ — ритм, ЧСС, амплитуду
+          и продолжительность зубцов — и объясняет, как он их считает.
+        </p>
+        <p className="text-sm md:text-base text-slate-400 dark:text-slate-500 max-w-2xl mx-auto">
+          Анализ только базовых параметров: ритм, ЧСС, амплитуда и продолжительность зубцов
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4">

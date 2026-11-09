@@ -1,4 +1,7 @@
-/** Вкладка «Задачи»: условие задачи, пошаговое решение через solveTask. */
+/**
+ * Вкладка «Задачи»: условие задачи → объяснение метода решения через solveTask.
+ * Готовый числовой ответ ИИ намеренно не даёт — только формулы и шаги.
+ */
 
 import { useState } from 'react'
 import { solveTask } from '../api'
@@ -36,7 +39,7 @@ export function SolverTab() {
           <textarea
             value={task}
             onChange={(e) => setTask(e.target.value.slice(0, MAX_TASK_LENGTH))}
-            placeholder="Например: Рассчитайте потенциал Нернста для K+ при 37°C, если внутриклеточная концентрация 140 ммоль/л, внеклеточная 4 ммоль/л"
+            placeholder="Введите задачу — мы объясним, как её решить, но не дадим готовый ответ. Например: Рассчитайте потенциал Нернста для K+ при 37°C, если внутриклеточная концентрация 140 ммоль/л, внеклеточная 4 ммоль/л"
             rows={5}
             className="block w-full rounded-lg border border-slate-300 dark:border-[#1F2E24] p-2 text-sm
                        bg-white dark:bg-[#121A15] text-slate-900 dark:text-emerald-50 placeholder-slate-400 dark:placeholder-emerald-200/40
@@ -76,10 +79,10 @@ export function SolverTab() {
           disabled={task.trim().length < 5 || loading}
           onClick={run}
         >
-          Решить
+          Объяснить
         </button>
 
-        {loading && <Spinner text="Решаем задачу... (обычно 5–10 секунд)" />}
+        {loading && <Spinner text="Объясняем решение... (обычно 5–10 секунд)" />}
         {error && <ErrorBlock message={error} />}
       </div>
 
@@ -93,7 +96,7 @@ export function SolverTab() {
         <div className="bg-white dark:bg-[#16201A] border border-slate-200 dark:border-[#1F2E24] rounded-xl p-4  transition-colors duration-200">
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
             <h3 className="text-sm font-semibold text-slate-700 dark:text-emerald-200/70">
-              Пошаговое решение
+              Как решать задачу
             </h3>
             <div className="flex gap-2">
               <CopyButton content={data.result} />

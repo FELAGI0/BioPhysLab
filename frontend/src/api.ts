@@ -148,7 +148,7 @@ async function handleError(response: Response): Promise<never> {
   throw new Error(message ?? `Ошибка сервера: ${response.status}`)
 }
 
-/** POST /api/solver — пошаговое решение задачи по биофизике. */
+/** POST /api/solver — объяснение метода решения задачи по биофизике (без готового ответа). */
 export async function solveTask(task: string): Promise<AiResult> {
   const response = await fetch('/api/solver', {
     method: 'POST',

@@ -35,7 +35,7 @@ async def solve_task(
     session: Session = Depends(get_or_create_session),
     user: User | None = Depends(get_current_user_optional),
 ) -> dict[str, str]:
-    """Решает задачу по биофизике пошагово и возвращает решение AI."""
+    """Объясняет, как решать задачу по биофизике (без готового ответа)."""
     rate_limit(request.cookies.get("biophyslab_sid") or session.id)
 
     started = time.monotonic()

@@ -2,9 +2,10 @@
  * Калькулятор: 20 биофизических формул из методички, локальный расчёт (без AI).
  * Категории: «Мембраны» (Нернст, ГХК, Фик, Нернст—Планк), «Гидродинамика»
  * (Пуазейль, Вязкость, Рейнольдс, Бернулли), «Акустика» (интенсивность,
- * звуковое давление, уровень дБ, скорости звука, Вебер—Фехнер, Доплер),
+ * звуковое давление, уровень дБ, скорости звука, Доплер),
  * «Электрический ток» (плотность тока, закон Ома, электрофорез,
- * гальванизация, переменный ток). Формулы выводятся крупно через KaTeX.
+ * гальванизация, переменный ток). Формулы выводятся крупно через KaTeX,
+ * под каждой — краткое пояснение, зачем она нужна.
  */
 
 import { useState } from 'react'
@@ -33,6 +34,8 @@ interface CalcDef {
   title: string
   /** LaTeX-формула для блока $$...$$ (рендерится KaTeX). */
   formula: string
+  /** Краткое пояснение (1-2 предложения): для чего нужна формула. */
+  description: string
   fields: CalcField[]
   /** Расчёт по значениям полей. Возвращает [значение, единица, подпись]. */
   compute: (v: Record<string, number>) => { value: number; unit: string; note?: string }
@@ -51,6 +54,9 @@ const nernst: CalcDef = {
   id: 'nernst',
   title: 'Уравнение Нернста',
   formula: 'E = \\frac{RT}{zF} \\ln\\frac{C_{\\text{нар}}}{C_{\\text{вн}}}',
+  description:
+    'Равновесный потенциал иона по разности его концентраций снаружи и внутри клетки. ' +
+    'Используется для расчёта потенциала покоя и оценки направления движения ионов.',
   fields: [
     { key: 'T', label: 'T — температура', unit: 'К', default: 310.15 },
     { key: 'z', label: 'z — заряд иона', default: 1 },
@@ -77,6 +83,9 @@ const ghk: CalcDef = {
     'V_m = \\frac{RT}{F} \\ln ' +
     '\\frac{P_K [K]_{\\text{нар}} + P_{Na} [Na]_{\\text{нар}} + P_{Cl} [Cl]_{\\text{вн}}} ' +
     '{P_K [K]_{\\text{вн}} + P_{Na} [Na]_{\\text{вн}} + P_{Cl} [Cl]_{\\text{нар}}}',
+  description:
+    'Мембранный потенциал с учётом проницаемости мембраны сразу для нескольких ионов. ' +
+    'Применяется, когда нужно оценить потенциал покоя реальной клетки, а не одного иона.',
   fields: [
     { key: 'T', label: 'T — температура', unit: 'К', default: 310.15 },
     { key: 'P_K', label: 'P_K — проницаемость K⁺', default: 1 },
@@ -112,6 +121,9 @@ const fick: CalcDef = {
   id: 'fick',
   title: 'Уравнение Фика',
   formula: 'J = -D \\frac{dC}{dx} S',
+  description:
+    'Диффузия: сколько вещества проходит через сечение за счёт градиента концентрации. ' +
+    'Используется для расчёта потоков ионов и газов через мембраны.',
   fields: [
     { key: 'D', label: 'Коэф. диффузии (D)', unit: 'м²/с', default: 1e-9 },
     { key: 'gradC', label: 'Градиент концентрации (dC/dx)', unit: 'моль/м⁴', default: 1e6 },
@@ -125,6 +137,9 @@ const nernstPlanck: CalcDef = {
   id: 'nernst-planck',
   title: 'Уравнение Нернста—Планка (упрощённое)',
   formula: 'J = -D \\frac{dC}{dx} + \\frac{zFC}{RT} E',
+  description:
+    'Объединяет диффузию и миграцию ионов в электрическом поле в один поток. ' +
+    'Нужно, чтобы оценить перенос ионов при наличии и градиента концентрации, и внешнего поля.',
   fields: [
     { key: 'D', label: 'Коэф. диффузии (D)', unit: 'м²/с', default: 1e-9 },
     { key: 'gradC', label: 'Градиент концентрации (dC/dx)', unit: 'моль/м⁴', default: 1e6 },
@@ -147,6 +162,9 @@ const poiseuille: CalcDef = {
   id: 'poiseuille',
   title: 'Формула Пуазейля (объёмный кровоток)',
   formula: 'Q = \\frac{\\pi R^4 \\Delta P}{8 \\eta L}',
+  description:
+    'Связывает объёмный кровоток с радиусом сосуда, перепадом давления и вязкостью крови. ' +
+    'Используется для оценки кровотока по сосуду и эффекта сужения артерий.',
   fields: [
     { key: 'r', label: 'R — радиус', unit: 'м', default: 0.002 },
     { key: 'dP', label: 'ΔP — разность давлений', unit: 'Па', default: 13332 },
@@ -171,6 +189,9 @@ const viscosity: CalcDef = {
   id: 'viscosity',
   title: 'Вязкость жидкости (уравнение Ньютона)',
   formula: 'F = \\eta \\frac{dv}{dx} S',
+  description:
+    'Уравнение Ньютона описывает внутреннее трение между слоями жидкости. ' +
+    'Используется для расчёта силы вязкости при известном градиенте скорости.',
   fields: [
     { key: 'eta', label: 'Вязкость (η)', unit: 'Па·с', default: 0.0035 },
     { key: 'grad', label: 'Градиент скорости (dv/dx)', unit: '1/с', default: 100 },
@@ -184,6 +205,9 @@ const bernoulli: CalcDef = {
   id: 'bernoulli',
   title: 'Уравнение Бернулли (полное давление)',
   formula: 'P + \\frac{1}{2}\\rho v^2 + \\rho g h = \\text{const}',
+  description:
+    'Связывает давление, скорость и высоту в потоке жидкости. ' +
+    'Применяется для расчёта полного давления в кровеносном сосуде и объяснения гидродинамических эффектов.',
   fields: [
     { key: 'P', label: 'Статическое давление (P)', unit: 'Па', default: 101325 },
     { key: 'rho', label: 'Плотность (ρ)', unit: 'кг/м³', default: 1060 },
@@ -206,6 +230,9 @@ const reynolds: CalcDef = {
   id: 'reynolds',
   title: 'Число Рейнольдса',
   formula: 'Re = \\frac{\\rho v d}{\\eta}',
+  description:
+    'Показывает, ламинарный или турбулентный режим течения. ' +
+    'Нужно, чтобы понять характер кровотока при заданных скорости, диаметре сосуда и вязкости.',
   fields: [
     { key: 'rho', label: 'ρ — плотность', unit: 'кг/м³', default: 1060 },
     { key: 'v', label: 'v — скорость', unit: 'м/с', default: 0.5 },
@@ -233,6 +260,9 @@ const intensity: CalcDef = {
   id: 'intensity',
   title: 'Интенсивность волны',
   formula: 'I = \\frac{P}{S}',
+  description:
+    'Мощность, приходящаяся на единицу площади. ' +
+    'Используется для оценки энергии, которую звук переносит через поверхность.',
   fields: [
     { key: 'P', label: 'Мощность (P)', unit: 'Вт', default: 1e-3 },
     { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
@@ -250,6 +280,9 @@ const soundPressure: CalcDef = {
   id: 'sound-pressure',
   title: 'Звуковое давление',
   formula: 'p = \\frac{F}{S}',
+  description:
+    'Сила, действующая со стороны волны на единицу площади. ' +
+    'Нужно для расчёта давления, которое возникает в среде при распространении звука.',
   fields: [
     { key: 'F', label: 'Сила (F)', unit: 'Н', default: 1e-4 },
     { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
@@ -267,6 +300,9 @@ const intensityLevel: CalcDef = {
   id: 'intensity-level',
   title: 'Уровень интенсивности (дБ)',
   formula: 'L = 10 \\, \\lg \\frac{I}{I_0}, \\quad I_0 = 10^{-12} \\, \\text{Вт/м}^2',
+  description:
+    'Переводит абсолютную интенсивность звука в децибелы по логарифмической шкале. ' +
+    'Применяется для оценки громкости относительно порога слышимости.',
   fields: [
     { key: 'I', label: 'Интенсивность (I)', unit: 'Вт/м²', default: 1e-12 },
   ],
@@ -285,6 +321,9 @@ const soundGas: CalcDef = {
   id: 'sound-gas',
   title: 'Скорость звука в газах',
   formula: 'v = \\sqrt{\\frac{\\gamma R T}{M}}',
+  description:
+    'Скорость звука в газе через показатель адиабаты, температуру и молярную массу. ' +
+    'Используется для расчёта скорости звука в воздухе и других газовых средах.',
   fields: [
     { key: 'gamma', label: 'Показатель адиабаты (γ)', default: 1.4 },
     { key: 'T', label: 'Температура (T)', unit: 'К', default: 310.15 },
@@ -307,6 +346,9 @@ const soundLiquid: CalcDef = {
   id: 'sound-liquid',
   title: 'Скорость звука в жидкостях',
   formula: 'v = \\sqrt{\\frac{K}{\\rho}}',
+  description:
+    'Скорость звука в жидкости через модуль объёмной упругости и плотность. ' +
+    'Применяется для расчёта скорости ультразвука в мягких тканях и воде.',
   fields: [
     { key: 'K', label: 'Модуль объёмной упругости (K)', unit: 'Па', default: 2.2e9 },
     { key: 'rho', label: 'Плотность (ρ)', unit: 'кг/м³', default: 1000 },
@@ -323,29 +365,14 @@ const soundLiquid: CalcDef = {
   },
 }
 
-// L) Закон Вебера—Фехнера: E = k · lg(I / I_0).
-const weberFechner: CalcDef = {
-  id: 'weber-fechner',
-  title: 'Закон Вебера—Фехнера',
-  formula: 'E = k \\, \\lg \\frac{I}{I_0}',
-  fields: [
-    { key: 'k', label: 'Коэффициент (k)', default: 0.1 },
-    { key: 'I', label: 'Интенсивность (I)', unit: 'Вт/м²', default: 1e-6 },
-  ],
-  compute: (v) => {
-    const I0 = 1e-12
-    if (v.I <= 0) {
-      return { value: NaN, unit: '', note: 'Интенсивность I должна быть больше нуля' }
-    }
-    return { value: v.k * Math.log10(v.I / I0), unit: '', note: 'I₀ = 10⁻¹² Вт/м² (условная единица ощущения)' }
-  },
-}
-
-// M) Доплеровский сдвиг: f' = f (v ± v_набл) / (v ∓ v_ист).
+// L) Доплеровский сдвиг: f' = f (v ± v_набл) / (v ∓ v_ист).
 const doppler: CalcDef = {
   id: 'doppler',
   title: 'Доплеровский сдвиг частоты',
   formula: "f' = f \\, \\frac{v \\pm v_{\\text{набл}}}{v \\mp v_{\\text{ист}}}",
+  description:
+    'Изменение частоты при относительном движении источника и наблюдателя. ' +
+    'Используется в ультразвуковой доплерографии для измерения скорости кровотока.',
   fields: [
     { key: 'f', label: 'Частота источника (f)', unit: 'Гц', default: 1000 },
     { key: 'v', label: 'Скорость звука (v)', unit: 'м/с', default: 340 },
@@ -378,6 +405,9 @@ const currentDensity: CalcDef = {
   id: 'current-density',
   title: 'Плотность тока',
   formula: 'j = \\frac{I}{S}',
+  description:
+    'Сила тока, приходящаяся на единицу площади сечения проводника или ткани. ' +
+    'Нужна для оценки воздействия тока на ткани и контроля процедур.',
   fields: [
     { key: 'I', label: 'Сила тока (I)', unit: 'А', default: 1e-3 },
     { key: 'S', label: 'Площадь (S)', unit: 'м²', default: 1e-4 },
@@ -395,6 +425,9 @@ const ohm: CalcDef = {
   id: 'ohm',
   title: 'Закон Ома для растворов',
   formula: 'I = \\frac{U}{R}, \\quad j = \\sigma E',
+  description:
+    'Связывает напряжение, ток и сопротивление, а также плотность тока с проводимостью. ' +
+    'Применяется для расчёта тока в тканях и растворах электролитов.',
   fields: [
     { key: 'U', label: 'Напряжение (U)', unit: 'В', default: 10 },
     { key: 'R', label: 'Сопротивление (R)', unit: 'Ом', default: 1000 },
@@ -420,6 +453,9 @@ const electrophoresisMax: CalcDef = {
   id: 'electrophoresis-max',
   title: 'Максимальная плотность тока при электрофорезе',
   formula: 'j_{\\max} = \\frac{I_{\\max}}{S}',
+  description:
+    'Проверяет, не превышена ли допустимая плотность тока при электрофорезе. ' +
+    'Помогает подобрать силу тока под площадь электрода без риска для пациента.',
   fields: [
     { key: 'Imax', label: 'Макс. сила тока (I_max)', unit: 'мА', default: 50 },
     { key: 'S', label: 'Площадь электрода (S)', unit: 'см²', default: 100 },
@@ -446,6 +482,9 @@ const galvanizationMax: CalcDef = {
   id: 'galvanization-max',
   title: 'Максимальное напряжение при гальванизации',
   formula: 'U_{\\max} = j_{\\max} \\, \\rho \\, L',
+  description:
+    'Оценивает максимальное напряжение при гальванизации по закону Ома. ' +
+    'Нужна для выбора параметров процедуры при заданном расстоянии между электродами.',
   fields: [
     { key: 'jmax', label: 'Макс. плотность тока (j_max)', unit: 'А/м²', default: 1 },
     { key: 'rho', label: 'Удельное сопротивление тканей (ρ)', unit: 'Ом·м', default: 2 },
@@ -463,6 +502,9 @@ const instantaneousCurrent: CalcDef = {
   id: 'instantaneous-current',
   title: 'Мгновенное значение силы тока',
   formula: 'i = I_{\\max} \\sin(\\omega t)',
+  description:
+    'Даёт мгновенное значение переменного тока в выбранный момент времени. ' +
+    'Используется для расчёта тока в любой фазе периода при известной амплитуде и частоте.',
   fields: [
     { key: 'Imax', label: 'Амплитуда (I_max)', unit: 'А', default: 1 },
     { key: 'omega', label: 'Угловая частота (ω)', unit: 'рад/с', default: 314.16 },
@@ -491,7 +533,7 @@ const CATEGORIES: CategoryDef[] = [
   {
     id: 'acoustics',
     label: 'Акустика',
-    calcs: [intensity, soundPressure, intensityLevel, soundGas, soundLiquid, weberFechner, doppler],
+    calcs: [intensity, soundPressure, intensityLevel, soundGas, soundLiquid, doppler],
   },
   {
     id: 'current',
@@ -553,8 +595,13 @@ function CalcCard({ calc }: { calc: CalcDef }) {
       {/* Огромная формула — KaTeX через MarkdownView. */}
       <MarkdownView
         content={`$$\n${calc.formula}\n$$`}
-        className="text-3xl font-bold text-center my-6 text-slate-900 dark:text-emerald-50 overflow-x-auto hide-scrollbar"
+        className="text-3xl font-bold text-center mt-6 mb-3 text-slate-900 dark:text-emerald-50 overflow-x-auto hide-scrollbar"
       />
+
+      {/* Короткое пояснение: для чего нужна формула. */}
+      <p className="text-sm text-slate-400 dark:text-emerald-200/50 text-center mb-4">
+        {calc.description}
+      </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {calc.fields.map((field) => (
