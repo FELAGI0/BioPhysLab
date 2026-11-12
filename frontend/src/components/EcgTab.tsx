@@ -37,6 +37,7 @@ export function EcgTab() {
   const [dragActive, setDragActive] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
   const [recent, setRecent] = useState<HistoryItem[]>([])
+  const [mode, setMode] = useState<'study' | 'pro'>('study')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const dragCounter = useRef(0)
 
@@ -57,7 +58,7 @@ export function EcgTab() {
   }, [])
 
   const { data, error, loading, run, reset } = useAsync(() =>
-    file ? analyzeEcg(file) : Promise.reject(new Error('Файл не выбран')),
+    file ? analyzeEcg(file, mode) : Promise.reject(new Error('Файл не выбран')),
   )
 
   /** Проверяет тип (png/jpg) и размер (до 5 МБ); принимает или отклоняет файл. */
@@ -169,6 +170,52 @@ export function EcgTab() {
                 alt="Предпросмотр ЭКГ"
                 className="max-h-64 rounded-lg border border-slate-200 dark:border-[#1F2E24]"
               />
+              
+              {/* Переключатель режимов */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-700 dark:text-emerald-200/70">
+                  Режим анализа
+                </p>
+                <div className="flex flex-col gap-2">
+                  <label className="flex items-start gap-3 cursor-pointer group">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="study"
+                      checked={mode === 'study'}
+                      onChange={(e) => setMode(e.target.value as 'study' | 'pro')}
+                      className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500"
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-slate-700 dark:text-emerald-50 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        Учебный
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        Только измерения: ритм, ЧСС, амплитуда и продолжительность зубцов
+                      </p>
+                    </div>
+                  </label>
+                  <label className="flex items-start gap-3 cursor-pointer group">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="pro"
+                      checked={mode === 'pro'}
+                      onChange={(e) => setMode(e.target.value as 'study' | 'pro')}
+                      className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500"
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-slate-700 dark:text-emerald-50 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        Профессиональный
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        Полный клинический разбор с интерпретацией, диагнозами и рекомендациями
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               <button
                 type="button"
                 className={BUTTON + ' inline-flex items-center gap-2'}

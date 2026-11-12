@@ -174,10 +174,13 @@ export async function explainTopic(topic: string, level: string): Promise<AiResu
   return response.json()
 }
 
-/** POST /api/ecg — разбор изображения ЭКГ (multipart, поле 'file'). */
-export async function analyzeEcg(file: File): Promise<AiResult> {
+/** POST /api/ecg — разбор изображения ЭКГ (multipart, поле 'file').
+ * @param mode - "study" (учебный режим, только измерения) или "pro" (профессиональный режим, полный разбор)
+ */
+export async function analyzeEcg(file: File, mode: string = 'study'): Promise<AiResult> {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('mode', mode)
   const response = await fetch('/api/ecg', {
     method: 'POST',
     headers: authHeaders(),

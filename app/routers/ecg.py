@@ -3,7 +3,7 @@
 import base64
 import time
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, UploadFile
+from fastapi import APIRouter, Depends, Form, HTTPException, Request, Response, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
@@ -14,7 +14,7 @@ from app.deps import (
     rate_limit,
 )
 from app.models import ModuleName, Session, User
-from app.prompts import ECG_PROMPT, OFF_TOPIC_MARKER
+from app.prompts import ECG_PROMPT_PRO, ECG_PROMPT_STUDY, OFF_TOPIC_MARKER
 from app.services.ai_client import ask_ai
 
 router = APIRouter(tags=["ecg"])
@@ -41,11 +41,16 @@ async def analyze_ecg(
     file: UploadFile,
     request: Request,
     response: Response,
+    mode: str = Form("study"),
     db: AsyncSession = Depends(get_db),
     session: Session = Depends(get_or_create_session),
     user: User | None = Depends(get_current_user_optional),
 ) -> dict[str, str]:
-    """Разбирает изображение ЭКГ (jpg/png, до 5 МБ) и возвращает анализ AI."""
+    """Разбирает изображение ЭКГ (jpg/png, до 5 МБ) и возвращает анализ AI.
+    
+    Args:
+        mode: "study" (учебный, только измерения) или "pro" (профессиональный, полный разбор)
+    """
     # Rate limit по id cookie-сессии.
     rate_limit(request.cookies.get("biophyslab_sid") or session.id)
 
@@ -84,9 +89,12 @@ async def analyze_ecg(
     image_b64 = base64.b64encode(data).decode("ascii")
     image_mime = detected
 
+    # Выбираем промпт в зависимости от режима работы.
+    prompt = ECG_PROMPT_PRO if mode == "pro" else ECG_PROMPT_STUDY
+
     started = time.monotonic()
     result = await ask_ai(
-        ECG_PROMPT, image_b64=image_b64, module="ecg", image_mime=image_mime
+        prompt, image_b64=image_b64, module="ecg", image_mime=image_mime
     )
     duration_ms = round((time.monotonic() - started) * 1000)
 
